@@ -7,6 +7,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundCue.h"
+#include "Engine/SkeletalMeshSocket.h"
 
 
 // Sets default values
@@ -85,6 +86,15 @@ void AShooterCharacter::FireWeapon()
 {
 	if (FireSound) {
 		UGameplayStatics::PlaySound2D(this, FireSound);
+	}
+	const USkeletalMeshSocket* MuzzleSocket = GetMesh()->GetSocketByName("muzzleSocket");
+
+	if (MuzzleSocket) {
+		const FTransform SocketTransf = MuzzleSocket->GetSocketTransform(GetMesh());
+
+		if (MuzzleFlash) {
+			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), MuzzleFlash, SocketTransf);
+		}
 	}
 }
 
