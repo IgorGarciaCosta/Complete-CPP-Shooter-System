@@ -79,6 +79,11 @@ void AShooterCharacter::LookUpAtRate(float rate)
 	AddControllerPitchInput(rate * BaseLookUpTurnRate * GetWorld()->GetDeltaSeconds());
 }
 
+void AShooterCharacter::FireWeapon()
+{
+	UE_LOG(LogTemp, Warning, TEXT("FIre"));
+}
+
 // Called every frame
 void AShooterCharacter::Tick(float DeltaTime)
 {
@@ -92,6 +97,7 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
+	PlayerInputComponent->BindAction("FireBtn", IE_Pressed, this, &AShooterCharacter::FireWeapon);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AShooterCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AShooterCharacter::MoveRight);
