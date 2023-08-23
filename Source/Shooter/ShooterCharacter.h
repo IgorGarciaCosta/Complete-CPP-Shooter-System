@@ -21,6 +21,8 @@ protected:
 
 	void MoveForward( float value);
 	void MoveRight(float value);
+	void TurnAtRate(float rate);
+	void LookUpAtRate(float rate);
 
 public:	
 	// Called every frame
@@ -34,6 +36,11 @@ private:
 		class USpringArmComponent* CameraBoom;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 		class UCameraComponent* FollowCamera;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		float BaseTurnRate = 45.f;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		float BaseLookUpTurnRate = 45.f;
+
 public:
 		FORCEINLINE USpringArmComponent* GetCameraBoom()const { return CameraBoom; }
 

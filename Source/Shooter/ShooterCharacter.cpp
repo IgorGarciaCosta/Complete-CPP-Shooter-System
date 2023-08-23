@@ -54,6 +54,21 @@ void AShooterCharacter::MoveRight(float value)
 	}
 }
 
+void AShooterCharacter::TurnAtRate(float rate)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("turn rate = %f"), rate));
+
+	AddControllerYawInput(rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
+}
+
+void AShooterCharacter::LookUpAtRate(float rate)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("look up rate = %f"), rate));
+
+	AddControllerPitchInput(rate * BaseLookUpTurnRate * GetWorld()->GetDeltaSeconds());
+
+}
+
 // Called every frame
 void AShooterCharacter::Tick(float DeltaTime)
 {
@@ -69,6 +84,9 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AShooterCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AShooterCharacter::MoveRight);
+
+	PlayerInputComponent->BindAxis("TurnRate", this, &AShooterCharacter::TurnAtRate);
+	PlayerInputComponent->BindAxis("LookUpRate", this, &AShooterCharacter::LookUpAtRate);
 
 }
 
