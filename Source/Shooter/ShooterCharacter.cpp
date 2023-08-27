@@ -8,6 +8,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundCue.h"
 #include "Engine/SkeletalMeshSocket.h"
+#include "DrawDebugHelpers.h"
 
 
 // Sets default values
@@ -95,6 +96,19 @@ void AShooterCharacter::FireWeapon()
 		if (MuzzleFlash) {
 			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), MuzzleFlash, SocketTransf);
 		}
+
+		FHitResult FireHit;
+		const FVector Start = SocketTransf.GetLocation();
+		const FQuat Rotation = SocketTransf.GetRotation();
+		const FVector RotationAxis = Rotation.GetAxisX();
+		const FVector End = Start + RotationAxis * 50000.f;
+
+		GetWorld()->LineTraceSingleByChannel(FireHit, Start, End, ECollisionChannel::ECC_Visibility);
+		if (FireHit.bBlockingHit) {
+			DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 2.f);
+			DrawDebugPoint(GetWorld(), FireHit.Location, 5.f, FColor::Red, false, 2.f);
+		}
+	
 	}
 	UAnimInstance* AnimInstange = GetMesh()->GetAnimInstance();
 	if (AnimInstange && HipFireMontage) {
