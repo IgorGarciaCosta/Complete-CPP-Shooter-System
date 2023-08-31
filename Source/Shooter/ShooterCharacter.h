@@ -26,6 +26,8 @@ protected:
 
 	void FireWeapon();
 
+	bool GetBeamEndLoc(const FVector& MuzzleSocketLocation, FVector& OutBeamLoc);
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
