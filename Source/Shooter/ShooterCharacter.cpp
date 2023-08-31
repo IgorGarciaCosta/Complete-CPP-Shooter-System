@@ -22,6 +22,7 @@ AShooterCharacter::AShooterCharacter()
 	CameraBoom->SetupAttachment(RootComponent);
 	CameraBoom->TargetArmLength = 300.f;
 	CameraBoom->bUsePawnControlRotation = true;
+	CameraBoom->SocketOffset = FVector(0.f, 50.f, 50.f);
 
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>("FollowCamera");
 	FollowCamera->SetupAttachment(CameraBoom);
@@ -30,11 +31,11 @@ AShooterCharacter::AShooterCharacter()
 
 	//controller only affets the camera
 	bUseControllerRotationPitch = false;
-	bUseControllerRotationYaw = false;
+	bUseControllerRotationYaw = true;
 	bUseControllerRotationRoll = false;
 
 	//configure char movement
-	GetCharacterMovement()->bOrientRotationToMovement = true;//char moves in the input direction
+	GetCharacterMovement()->bOrientRotationToMovement = false;//char moves in the input direction
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 540.f, 0.f);//moves at this to rate
 	GetCharacterMovement()->JumpZVelocity = 600.f;
 	GetCharacterMovement()->AirControl = 0.2f;
