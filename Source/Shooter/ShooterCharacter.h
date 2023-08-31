@@ -51,6 +51,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		class UAnimMontage* HipFireMontage;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		class UParticleSystem* ImpactParticles;
+
 public:
 		FORCEINLINE USpringArmComponent* GetCameraBoom()const { return CameraBoom; }
 
