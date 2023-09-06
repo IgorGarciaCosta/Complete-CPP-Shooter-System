@@ -31,6 +31,8 @@ protected:
 	void AimingBtnPressed() ;
 	void AimingBtnReleased();
 
+	void CameraInterpZoom(float DeltaTime);
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -66,7 +68,12 @@ private:
 		bool bAiming = false;
 
 	float DefaultCameraFOV = 0.f;
-	float ZoomedCameraFOV = 60.f;
+	float ZoomedCameraFOV = 35.f;
+
+	float CameraCurrentFOV = 0.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		float ZoomInterpSpeed = 30.f;
 
 
 public:

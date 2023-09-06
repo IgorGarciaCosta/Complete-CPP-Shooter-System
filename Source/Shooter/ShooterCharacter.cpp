@@ -20,9 +20,9 @@ AShooterCharacter::AShooterCharacter()
 
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>("CameraBoom");
 	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->TargetArmLength = 300.f;
+	CameraBoom->TargetArmLength = 180.f;
 	CameraBoom->bUsePawnControlRotation = true;
-	CameraBoom->SocketOffset = FVector(0.f, 50.f, 50.f);
+	CameraBoom->SocketOffset = FVector(0.f, 50.f, 70.f);
 
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>("FollowCamera");
 	FollowCamera->SetupAttachment(CameraBoom);
@@ -49,6 +49,7 @@ void AShooterCharacter::BeginPlay()
 	
 	if (FollowCamera) {
 		DefaultCameraFOV = GetFollowCamera()->FieldOfView;
+		CameraCurrentFOV = DefaultCameraFOV;
 	}
 }
 
@@ -182,21 +183,35 @@ bool AShooterCharacter::GetBeamEndLoc(const FVector& MuzzleSocketLocation, FVect
 void AShooterCharacter::AimingBtnPressed()
 {
 	bAiming = true;
-	GetFollowCamera()->SetFieldOfView(ZoomedCameraFOV);
 }
 
 void AShooterCharacter::AimingBtnReleased()
 {
 	bAiming = false;
-	GetFollowCamera()->SetFieldOfView(DefaultCameraFOV);
+}
 
+void AShooterCharacter::CameraInterpZoom(float DeltaTime)
+{
+	if (bAiming) {//interp to zoomed fov
+		CameraCurrentFOV = FMath::FInterpTo(CameraCurrentFOV,
+			ZoomedCameraFOV,
+			DeltaTime,
+			ZoomInterpSpeed);
+	}
+	else {//interp to default fov
+		CameraCurrentFOV = FMath::FInterpTo(CameraCurrentFOV,
+			DefaultCameraFOV,
+			DeltaTime,
+			ZoomInterpSpeed);
+	}
+	GetFollowCamera()->SetFieldOfView(CameraCurrentFOV);
 }
 
 // Called every frame
 void AShooterCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	CameraInterpZoom(DeltaTime);
 }
 
 // Called to bind functionality to input
