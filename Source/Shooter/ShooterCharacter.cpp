@@ -47,6 +47,9 @@ void AShooterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	if (FollowCamera) {
+		DefaultCameraFOV = GetFollowCamera()->FieldOfView;
+	}
 }
 
 void AShooterCharacter::MoveForward(float value)
@@ -176,6 +179,19 @@ bool AShooterCharacter::GetBeamEndLoc(const FVector& MuzzleSocketLocation, FVect
 	return false;
 }
 
+void AShooterCharacter::AimingBtnPressed()
+{
+	bAiming = true;
+	GetFollowCamera()->SetFieldOfView(ZoomedCameraFOV);
+}
+
+void AShooterCharacter::AimingBtnReleased()
+{
+	bAiming = false;
+	GetFollowCamera()->SetFieldOfView(DefaultCameraFOV);
+
+}
+
 // Called every frame
 void AShooterCharacter::Tick(float DeltaTime)
 {
@@ -199,6 +215,9 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
+
+	PlayerInputComponent->BindAction("AimingBtn", IE_Pressed, this, &AShooterCharacter::AimingBtnPressed);
+	PlayerInputComponent->BindAction("AimingBtn", IE_Released, this, &AShooterCharacter::AimingBtnReleased);
 
 }
 

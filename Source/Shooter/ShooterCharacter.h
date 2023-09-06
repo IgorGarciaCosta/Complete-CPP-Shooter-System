@@ -28,6 +28,9 @@ protected:
 
 	bool GetBeamEndLoc(const FVector& MuzzleSocketLocation, FVector& OutBeamLoc);
 
+	void AimingBtnPressed() ;
+	void AimingBtnReleased();
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -58,6 +61,12 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		class UParticleSystem* BeamParticles;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		bool bAiming = false;
+
+	float DefaultCameraFOV = 0.f;
+	float ZoomedCameraFOV = 60.f;
 
 
 public:
