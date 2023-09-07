@@ -24,6 +24,11 @@ protected:
 	void TurnAtRate(float rate);
 	void LookUpAtRate(float rate);
 
+	//rotate controller based on mouse X movement
+	void Turn(float Value);
+	//rotate controller based on mouse Y movement
+	void LookUp(float Value);
+
 	void FireWeapon();
 
 	bool GetBeamEndLoc(const FVector& MuzzleSocketLocation, FVector& OutBeamLoc);
@@ -60,6 +65,17 @@ private:
 		float AimingTurnRate = 20.f;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 		float AimingLookUpRate = 20.f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), meta=(ClampMin = "0.0", ClampMax = "1.0", UIMin = "0.0", UIMax = "1.0"))
+		float MouseHipTurnRate = 1.f;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), meta = (ClampMin = "0.0", ClampMax = "1.0", UIMin = "0.0", UIMax = "1.0"))
+		float MouseHipLookUpRate = 1.f;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), meta = (ClampMin = "0.0", ClampMax = "1.0", UIMin = "0.0", UIMax = "1.0"))
+		float MouseAimingTurnRate = .2f;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), meta = (ClampMin = "0.0", ClampMax = "1.0", UIMin = "0.0", UIMax = "1.0"))
+		float MouseAimingLookUpRate = .2f;
+
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		class USoundCue* FireSound;

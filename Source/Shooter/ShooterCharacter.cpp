@@ -89,6 +89,32 @@ void AShooterCharacter::LookUpAtRate(float rate)
 	AddControllerPitchInput(rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
 }
 
+void AShooterCharacter::Turn(float Value)
+{
+	float TurnScaleFactor;
+	if (bAiming) {
+		TurnScaleFactor = MouseAimingTurnRate;
+	}
+	else {
+		TurnScaleFactor = MouseHipTurnRate;
+	}
+
+	AddControllerYawInput(Value * TurnScaleFactor);
+}
+
+void AShooterCharacter::LookUp(float Value)
+{
+	float LookUpScaleFactor;
+	if (bAiming) {
+		LookUpScaleFactor = MouseAimingLookUpRate;
+	}
+	else {
+		LookUpScaleFactor = MouseHipLookUpRate;
+	}
+
+	AddControllerYawInput(Value * LookUpScaleFactor);
+}
+
 void AShooterCharacter::FireWeapon()
 {
 	if (FireSound) {
@@ -242,8 +268,8 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAxis("TurnRate", this, &AShooterCharacter::TurnAtRate);
 	PlayerInputComponent->BindAxis("LookUpRate", this, &AShooterCharacter::LookUpAtRate);
 
-	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
-	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
+	PlayerInputComponent->BindAxis("Turn", this, &AShooterCharacter::Turn);
+	PlayerInputComponent->BindAxis("LookUp", this, &AShooterCharacter::LookUp);
 
 	PlayerInputComponent->BindAction("AimingBtn", IE_Pressed, this, &AShooterCharacter::AimingBtnPressed);
 	PlayerInputComponent->BindAction("AimingBtn", IE_Released, this, &AShooterCharacter::AimingBtnReleased);
