@@ -86,7 +86,7 @@ void AShooterCharacter::TurnAtRate(float rate)
 
 void AShooterCharacter::LookUpAtRate(float rate)
 {
-	AddControllerPitchInput(rate * BaseLookUpTurnRate * GetWorld()->GetDeltaSeconds());
+	AddControllerPitchInput(rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
 }
 
 void AShooterCharacter::FireWeapon()
@@ -207,11 +207,25 @@ void AShooterCharacter::CameraInterpZoom(float DeltaTime)
 	GetFollowCamera()->SetFieldOfView(CameraCurrentFOV);
 }
 
+void AShooterCharacter::SetInterpRates()
+{
+	if (bAiming) {
+		BaseTurnRate = AimingTurnRate;
+		BaseLookUpRate = AimingLookUpRate;
+	}
+	else {
+		BaseTurnRate = HipTurnRate;
+		BaseLookUpRate = HipLookUpRate;
+	}
+}
+
 // Called every frame
 void AShooterCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	CameraInterpZoom(DeltaTime);
+
+	SetInterpRates();
 }
 
 // Called to bind functionality to input

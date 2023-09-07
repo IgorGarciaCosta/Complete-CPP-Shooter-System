@@ -33,6 +33,8 @@ protected:
 
 	void CameraInterpZoom(float DeltaTime);
 
+	void SetInterpRates();
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -48,7 +50,16 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 		float BaseTurnRate = 45.f;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-		float BaseLookUpTurnRate = 45.f;
+		float BaseLookUpRate = 45.f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		float HipTurnRate = 90.f;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		float HipLookUpRate = 90.f;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		float AimingTurnRate = 20.f;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		float AimingLookUpRate = 20.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		class USoundCue* FireSound;
