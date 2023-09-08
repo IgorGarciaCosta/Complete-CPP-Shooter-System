@@ -245,6 +245,22 @@ void AShooterCharacter::SetInterpRates()
 	}
 }
 
+void AShooterCharacter::CalculateCrosshairSpread(float DeltaTime)
+{
+	FVector2D WalkSPeedRange = FVector2D(0.f, 600.f);
+	FVector2D VelMultRange = FVector2D(0.f, 1.f);
+	FVector Velocity = GetVelocity();
+	Velocity.Z = 0.f;
+
+	CrosshairVelocityFactor = FMath::GetMappedRangeValueClamped(
+		WalkSPeedRange,
+		VelMultRange,
+		Velocity.Size()
+		);
+
+	CrosshairSpreadMult = .5f + CrosshairVelocityFactor;
+}
+
 // Called every frame
 void AShooterCharacter::Tick(float DeltaTime)
 {
@@ -252,6 +268,7 @@ void AShooterCharacter::Tick(float DeltaTime)
 	CameraInterpZoom(DeltaTime);
 
 	SetInterpRates();
+	CalculateCrosshairSpread(DeltaTime)
 }
 
 // Called to bind functionality to input

@@ -40,6 +40,8 @@ protected:
 
 	void SetInterpRates();
 
+	void CalculateCrosshairSpread(float DeltaTime);
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -102,16 +104,18 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		float ZoomInterpSpeed = 30.f;
 
+
+	//crosshair spread related variables
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		float CrosshairSpreadMult;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		float CrosshairSpreadMult;
+		float CrosshairVelocityFactor;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		float CrosshairSpreadMult;
+		float CrosshairInAirFactor;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		float CrosshairSpreadMult;
+		float CrosshairAimFactor;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		float CrosshairSpreadMult;
+		float CrosshairSHootingFactor;
 
 
 public:
