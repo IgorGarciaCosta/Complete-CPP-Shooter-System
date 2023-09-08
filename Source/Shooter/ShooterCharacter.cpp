@@ -268,7 +268,9 @@ void AShooterCharacter::Tick(float DeltaTime)
 	CameraInterpZoom(DeltaTime);
 
 	SetInterpRates();
-	CalculateCrosshairSpread(DeltaTime)
+
+	//calculates crosshair spread multiplier
+	CalculateCrosshairSpread(DeltaTime);
 }
 
 // Called to bind functionality to input
@@ -291,5 +293,10 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAction("AimingBtn", IE_Pressed, this, &AShooterCharacter::AimingBtnPressed);
 	PlayerInputComponent->BindAction("AimingBtn", IE_Released, this, &AShooterCharacter::AimingBtnReleased);
 
+}
+
+float AShooterCharacter::GetCrosshairSpreadMult() const
+{
+	return CrosshairSpreadMult;
 }
 
