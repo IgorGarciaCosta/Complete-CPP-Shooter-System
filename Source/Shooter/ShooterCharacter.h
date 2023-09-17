@@ -107,15 +107,15 @@ private:
 
 	//crosshair spread related variables
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		float CrosshairSpreadMult;
+		float CrosshairSpreadMult = 0.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		float CrosshairVelocityFactor;
+		float CrosshairVelocityFactor = 0.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		float CrosshairInAirFactor;
+		float CrosshairInAirFactor = 0.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		float CrosshairAimFactor;
+		float CrosshairAimFactor = 0.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		float CrosshairSHootingFactor;
+		float CrosshairSHootingFactor = 0.f;
 
 
 public:

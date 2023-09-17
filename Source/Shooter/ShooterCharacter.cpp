@@ -268,7 +268,29 @@ void AShooterCharacter::CalculateCrosshairSpread(float DeltaTime)
 
 	}
 
-	CrosshairSpreadMult = .5f + CrosshairVelocityFactor + CrosshairInAirFactor;
+	if (bAiming) {
+		//shrink crosshairs a small amount quickly
+		CrosshairAimFactor = FMath::FInterpTo(
+			CrosshairAimFactor,
+			0.6f,
+			DeltaTime,
+			30.f
+		);
+
+	}
+
+	else {
+		//spread crosshairs back to normal quickly
+		CrosshairAimFactor = FMath::FInterpTo(
+			CrosshairAimFactor,
+			0.0f,
+			DeltaTime,
+			30.f
+		);
+
+	}
+
+	CrosshairSpreadMult = .5f + CrosshairVelocityFactor + CrosshairInAirFactor - CrosshairAimFactor;
 }
 
 // Called every frame
