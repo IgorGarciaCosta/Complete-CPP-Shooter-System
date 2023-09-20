@@ -318,6 +318,39 @@ void AShooterCharacter::StartCrosshairBulletFire()
 
 }
 
+void AShooterCharacter::FireBtnPressed()
+{
+	bFireBtnPressed = true;
+	StartFireTimer();
+}
+
+void AShooterCharacter::FireBtnReleased()
+{
+	bFireBtnPressed = false;
+	
+}
+
+void AShooterCharacter::StartFireTimer()
+{
+	if (bShouldFire) {
+		FireWeapon();
+		bShouldFire = false;
+		GetWorldTimerManager().SetTimer(
+		AutoFreTimerHandle,
+		this, 
+		&AShooterCharacter::AutoFireReset,
+		AutomaticFireRate);
+	}
+}
+
+void AShooterCharacter::AutoFireReset()
+{
+	bShouldFire = true;
+	if (bFireBtnPressed) {
+		StartFireTimer();
+	}
+}
+
 // Called every frame
 void AShooterCharacter::Tick(float DeltaTime)
 {
@@ -336,7 +369,9 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-	PlayerInputComponent->BindAction("FireBtn", IE_Pressed, this, &AShooterCharacter::FireWeapon);
+	PlayerInputComponent->BindAction("FireBtn", IE_Pressed, this, &AShooterCharacter::FireBtnPressed);
+	PlayerInputComponent->BindAction("FireBtn", IE_Released, this, &AShooterCharacter::FireBtnReleased);
+
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AShooterCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AShooterCharacter::MoveRight);

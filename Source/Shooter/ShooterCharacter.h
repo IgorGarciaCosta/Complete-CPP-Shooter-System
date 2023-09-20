@@ -46,6 +46,14 @@ protected:
 		void FinishCrosshairBulletFire();
 	void StartCrosshairBulletFire();
 
+	void FireBtnPressed();
+
+	void FireBtnReleased();
+
+	void StartFireTimer();
+
+	UFUNCTION()
+		void AutoFireReset();
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -124,6 +132,14 @@ private:
 	float ShootTimeDuration = 0.05f;
 	bool bFiringBullets = false;
 	FTimerHandle CrosshairShootTimerHandle;
+
+	bool bFireBtnPressed = false;
+
+	bool bShouldFire = true;
+
+	float AutomaticFireRate = 0.1f;
+
+	FTimerHandle AutoFreTimerHandle;
 
 public:
 		FORCEINLINE USpringArmComponent* GetCameraBoom()const { return CameraBoom; }
