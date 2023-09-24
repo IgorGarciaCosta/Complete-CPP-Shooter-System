@@ -3,6 +3,7 @@
 
 #include "Item.h"
 #include "Components/BoxComponent.h"
+#include "Components/WidgetComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 
 
@@ -18,6 +19,10 @@ AItem::AItem()
 
 	CollisionBox = CreateDefaultSubobject< UBoxComponent>("CollisionBox");
 	CollisionBox->SetupAttachment(ItemMesh);
+
+	PickupWidget = CreateDefaultSubobject<UWidgetComponent>("PickupWidget");
+	PickupWidget->SetupAttachment(GetRootComponent());
+
 }
 
 // Called when the game starts or when spawned
