@@ -10,6 +10,9 @@
 #include "Engine/SkeletalMeshSocket.h"
 #include "DrawDebugHelpers.h"
 #include "Particles/ParticleSystemComponent.h"
+#include "Item.h"
+#include "Components/WidgetComponent.h"
+
 
 
 // Sets default values
@@ -351,6 +354,44 @@ void AShooterCharacter::AutoFireReset()
 	}
 }
 
+bool AShooterCharacter::TraceUnderCrosshairs(FHitResult& OutHitResult)
+{
+
+	//get currrent viewportSize
+	FVector2D ViewPortSize;
+	if (GEngine && GEngine->GameViewport) {
+		GEngine->GameViewport->GetViewportSize(ViewPortSize);
+	}
+
+	//get crosshair loc in screen
+	FVector2D CrosshairLoc(ViewPortSize.X / 2.f, ViewPortSize.Y / 2.f);
+	CrosshairLoc.Y -= 50.f;
+	FVector CrossHairWorldPosition;
+	FVector CrossHairWorldDirection;
+
+	//get world pos and dir of the crosshasr
+	bool bScreenToWorld = UGameplayStatics::DeprojectScreenToWorld(UGameplayStatics::GetPlayerController(this, 0), CrosshairLoc,
+		CrossHairWorldPosition, CrossHairWorldDirection);
+
+	if (bScreenToWorld) {
+		//trave from crosshair world loc outward
+
+		const FVector Start = CrossHairWorldPosition;
+		const FVector End = Start + CrossHairWorldDirection * 50000.f;
+		GetWorld()->LineTraceSingleByChannel(OutHitResult, Start, End, ECollisionChannel::ECC_Visibility);
+
+		if (OutHitResult.bBlockingHit) {
+			
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, "OutHitResult.bBlockingHit true");
+			return true;
+
+		}
+	}
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "OutHitResult.bBlockingHit false");
+
+	return false;
+}
+
 // Called every frame
 void AShooterCharacter::Tick(float DeltaTime)
 {
@@ -361,6 +402,19 @@ void AShooterCharacter::Tick(float DeltaTime)
 
 	//calculates crosshair spread multiplier
 	CalculateCrosshairSpread(DeltaTime);
+
+	FHitResult ItemTraceResult;
+	TraceUnderCrosshairs(ItemTraceResult);
+
+
+	if (ItemTraceResult.bBlockingHit) {
+		AItem* HitItem = Cast<AItem>(ItemTraceResult.Actor);
+		if (HitItem && HitItem->GetPickupWidget()) {
+			//show item's pickup widget
+			HitItem->GetPickupWidget()->SetVisibility(true);
+		}
+		
+	}
 }
 
 // Called to bind functionality to input
