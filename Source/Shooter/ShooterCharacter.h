@@ -56,6 +56,8 @@ protected:
 		void AutoFireReset();
 
 	bool TraceUnderCrosshairs(FHitResult& OutHitResult, FVector& OutHitLocation);
+
+	void TraceForItems();
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -143,12 +145,20 @@ private:
 
 	FTimerHandle AutoFreTimerHandle;
 
+	bool bSHouldTraceForItems = false;
+
+	int8 OverlappedItemCount;
+
 public:
 		FORCEINLINE USpringArmComponent* GetCameraBoom()const { return CameraBoom; }
 
 		FORCEINLINE UCameraComponent* GetFollowCamera() const { return FollowCamera; };
 
 		FORCEINLINE bool GetAIming() const { return bAiming; }
+
+		FORCEINLINE int8 GetOverlappedItemCount() const { return OverlappedItemCount; };
+
+		void IncrementOverlappedItemCount(int8 Amount);
 
 		UFUNCTION(BlueprintCallable)
 			float GetCrosshairSpreadMult() const;

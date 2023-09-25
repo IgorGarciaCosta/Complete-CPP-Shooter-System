@@ -174,7 +174,8 @@ bool AShooterCharacter::GetBeamEndLoc(const FVector& MuzzleSocketLocation, FVect
 	//perform trace from gun barrel
 	FHitResult WeaponTraceHit;
 	const FVector WeaponTraceStart = MuzzleSocketLocation;
-	const FVector WeaponTraceEnd = OutBeamLoc;
+	const FVector StartToEnd = OutBeamLoc- MuzzleSocketLocation;
+	const FVector WeaponTraceEnd = MuzzleSocketLocation + StartToEnd * 1.25f;
 	//line trace from gun barrel to hit point
 	GetWorld()->LineTraceSingleByChannel(WeaponTraceHit, WeaponTraceStart, WeaponTraceEnd, ECollisionChannel::ECC_Visibility);
 	if (WeaponTraceHit.bBlockingHit) {//obj between barel and beamEndPoint
@@ -366,6 +367,25 @@ bool AShooterCharacter::TraceUnderCrosshairs(FHitResult& OutHitResult, FVector& 
 	return false;
 }
 
+void AShooterCharacter::TraceForItems()
+{
+	if (bSHouldTraceForItems) {
+		FHitResult ItemTraceResult;
+		FVector HitLoc;
+		TraceUnderCrosshairs(ItemTraceResult, HitLoc);
+
+
+		if (ItemTraceResult.bBlockingHit) {
+			AItem* HitItem = Cast<AItem>(ItemTraceResult.Actor);
+			if (HitItem && HitItem->GetPickupWidget()) {
+				//show item's pickup widget
+				HitItem->GetPickupWidget()->SetVisibility(true);
+			}
+
+		}
+	}
+}
+
 // Called every frame
 void AShooterCharacter::Tick(float DeltaTime)
 {
@@ -377,19 +397,10 @@ void AShooterCharacter::Tick(float DeltaTime)
 	//calculates crosshair spread multiplier
 	CalculateCrosshairSpread(DeltaTime);
 
-	FHitResult ItemTraceResult;
-	FVector HitLoc;
-	TraceUnderCrosshairs(ItemTraceResult, HitLoc);
+	TraceForItems();
+	
 
-
-	if (ItemTraceResult.bBlockingHit) {
-		AItem* HitItem = Cast<AItem>(ItemTraceResult.Actor);
-		if (HitItem && HitItem->GetPickupWidget()) {
-			//show item's pickup widget
-			HitItem->GetPickupWidget()->SetVisibility(true);
-		}
-		
-	}
+	
 }
 
 // Called to bind functionality to input
@@ -414,6 +425,18 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAction("AimingBtn", IE_Pressed, this, &AShooterCharacter::AimingBtnPressed);
 	PlayerInputComponent->BindAction("AimingBtn", IE_Released, this, &AShooterCharacter::AimingBtnReleased);
 
+}
+
+void AShooterCharacter::IncrementOverlappedItemCount(int8 Amount)
+{
+	if (OverlappedItemCount + Amount <= 0) {
+		OverlappedItemCount = 0;
+		bSHouldTraceForItems = false;
+	}
+	else {
+		OverlappedItemCount += Amount;
+		bSHouldTraceForItems = true;
+	}
 }
 
 float AShooterCharacter::GetCrosshairSpreadMult() const

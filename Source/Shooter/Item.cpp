@@ -3,8 +3,11 @@
 
 #include "Item.h"
 #include "Components/BoxComponent.h"
+#include "Components/SphereComponent.h"
 #include "Components/WidgetComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "ShooterCharacter.h"
+
 
 
 
@@ -22,6 +25,9 @@ AItem::AItem()
 	CollisionBox->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 	CollisionBox->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
 
+	AreaSphere = CreateDefaultSubobject< USphereComponent>("AreaSphere");
+	AreaSphere->SetupAttachment(GetRootComponent());
+
 	PickupWidget = CreateDefaultSubobject<UWidgetComponent>("PickupWidget");
 	PickupWidget->SetupAttachment(GetRootComponent());
 
@@ -32,8 +38,32 @@ void AItem::BeginPlay()
 {
 	Super::BeginPlay();
 	PickupWidget->SetVisibility(false);
-	
+
+	AreaSphere->OnComponentBeginOverlap.AddDynamic(this, &AItem::OnShpereOverlapBegin);
+	AreaSphere->OnComponentEndOverlap.AddDynamic(this, &AItem::OnSphereOverlapEnd);
 }
+
+void AItem::OnShpereOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (OtherActor) {
+		AShooterCharacter* Char = Cast< AShooterCharacter>(OtherActor);
+		if (Char) {
+			Char->IncrementOverlappedItemCount(1);
+		}
+	}
+}
+
+void AItem::OnSphereOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	if (OtherActor) {
+		AShooterCharacter* Char = Cast< AShooterCharacter>(OtherActor);
+		if (Char) {
+			Char->IncrementOverlappedItemCount(-1);
+		}
+	}
+}
+
+
 
 // Called every frame
 void AItem::Tick(float DeltaTime)
