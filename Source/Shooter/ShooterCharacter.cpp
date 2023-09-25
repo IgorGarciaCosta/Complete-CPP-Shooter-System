@@ -377,11 +377,20 @@ void AShooterCharacter::TraceForItems()
 
 		if (ItemTraceResult.bBlockingHit) {
 			AItem* HitItem = Cast<AItem>(ItemTraceResult.Actor);
-			if (HitItem && HitItem->GetPickupWidget()) {
-				//show item's pickup widget
-				HitItem->GetPickupWidget()->SetVisibility(true);
-			}
 
+			if (HitItem) {
+				LeastHitItem = HitItem;
+
+				if (HitItem->GetPickupWidget()) {
+					//show item's pickup widget
+					HitItem->GetPickupWidget()->SetVisibility(true);
+				}
+			}
+			else if (LeastHitItem) {
+				LeastHitItem->GetPickupWidget()->SetVisibility(false);
+			}
+			
+			
 		}
 	}
 }

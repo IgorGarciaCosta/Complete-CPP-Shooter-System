@@ -149,6 +149,8 @@ private:
 
 	int8 OverlappedItemCount;
 
+	class AItem* LeastHitItem;
+
 public:
 		FORCEINLINE USpringArmComponent* GetCameraBoom()const { return CameraBoom; }
 
