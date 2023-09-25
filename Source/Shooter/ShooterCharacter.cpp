@@ -161,56 +161,29 @@ void AShooterCharacter::FireWeapon()
 
 bool AShooterCharacter::GetBeamEndLoc(const FVector& MuzzleSocketLocation, FVector& OutBeamLoc)
 {
-
-	//get currrent viewportSize
-	FVector2D ViewPortSize;
-	if (GEngine && GEngine->GameViewport) {
-		GEngine->GameViewport->GetViewportSize(ViewPortSize);
+	//check for croshairs trace hit
+	FHitResult CrossHairHitResult;
+	bool bCrissHairHit = TraceUnderCrosshairs(CrossHairHitResult, OutBeamLoc);
+	if (bCrissHairHit) {
+		OutBeamLoc = CrossHairHitResult.Location;
+	}
+	else {//no crosshair trace hit
+		//outbeamloc is the end location for the linetrace
 	}
 
-	//get crosshair loc in screen
-	FVector2D CrosshairLoc(ViewPortSize.X / 2.f, ViewPortSize.Y / 2.f);
-	CrosshairLoc.Y -= 50.f;
-	FVector CrossHairWorldPosition;
-	FVector CrossHairWorldDirection;
-
-	//get world pos and dir of the crosshasr
-	bool bScreenToWorld = UGameplayStatics::DeprojectScreenToWorld(UGameplayStatics::GetPlayerController(this, 0), CrosshairLoc,
-		CrossHairWorldPosition, CrossHairWorldDirection);
-
-	if (bScreenToWorld) {//check if the dproj was successful
-		FHitResult ScreenTraceHit;
-		const FVector Start = CrossHairWorldPosition;
-		const FVector End = CrossHairWorldPosition + CrossHairWorldDirection * 50000.f;
-
-
-		//set beam endpoint to linetrace endpoint
-		OutBeamLoc = End;
-
-		//trace outward from crosshair world loc
-		GetWorld()->LineTraceSingleByChannel(ScreenTraceHit, Start, End, ECollisionChannel::ECC_Visibility);
-
-		if (ScreenTraceHit.bBlockingHit) {//check if was there a trace hit
-
-			//beamendpoint is now tracehit loc
-			OutBeamLoc = ScreenTraceHit.Location;
-
-		}
-
-		//perform a second trace, this time from the gun barrel
-		FHitResult WeaponTraceHit;
-		const FVector WeaponTraceStart = MuzzleSocketLocation;
-		const FVector WeaponTraceEnd = OutBeamLoc;
-		//line trace from gun barrel to hit point
-		GetWorld()->LineTraceSingleByChannel(WeaponTraceHit, WeaponTraceStart, WeaponTraceEnd, ECollisionChannel::ECC_Visibility);
-		if (WeaponTraceHit.bBlockingHit) {//obj between barel and beamEndPoint
-			OutBeamLoc = WeaponTraceHit.Location;
-		}
-
+	//perform trace from gun barrel
+	FHitResult WeaponTraceHit;
+	const FVector WeaponTraceStart = MuzzleSocketLocation;
+	const FVector WeaponTraceEnd = OutBeamLoc;
+	//line trace from gun barrel to hit point
+	GetWorld()->LineTraceSingleByChannel(WeaponTraceHit, WeaponTraceStart, WeaponTraceEnd, ECollisionChannel::ECC_Visibility);
+	if (WeaponTraceHit.bBlockingHit) {//obj between barel and beamEndPoint
+		OutBeamLoc = WeaponTraceHit.Location;
 		return true;
 	}
-
 	return false;
+
+
 }
 
 void AShooterCharacter::AimingBtnPressed()
@@ -354,7 +327,7 @@ void AShooterCharacter::AutoFireReset()
 	}
 }
 
-bool AShooterCharacter::TraceUnderCrosshairs(FHitResult& OutHitResult)
+bool AShooterCharacter::TraceUnderCrosshairs(FHitResult& OutHitResult, FVector& OutHitLocation)
 {
 
 	//get currrent viewportSize
@@ -378,16 +351,17 @@ bool AShooterCharacter::TraceUnderCrosshairs(FHitResult& OutHitResult)
 
 		const FVector Start = CrossHairWorldPosition;
 		const FVector End = Start + CrossHairWorldDirection * 50000.f;
+		OutHitLocation = End;
 		GetWorld()->LineTraceSingleByChannel(OutHitResult, Start, End, ECollisionChannel::ECC_Visibility);
 
 		if (OutHitResult.bBlockingHit) {
-			
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, "OutHitResult.bBlockingHit true");
+			OutHitLocation = OutHitResult.Location;
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, "OutHitResult.bBlockingHit true");
 			return true;
 
 		}
 	}
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "OutHitResult.bBlockingHit false");
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "OutHitResult.bBlockingHit false");
 
 	return false;
 }
@@ -404,7 +378,8 @@ void AShooterCharacter::Tick(float DeltaTime)
 	CalculateCrosshairSpread(DeltaTime);
 
 	FHitResult ItemTraceResult;
-	TraceUnderCrosshairs(ItemTraceResult);
+	FVector HitLoc;
+	TraceUnderCrosshairs(ItemTraceResult, HitLoc);
 
 
 	if (ItemTraceResult.bBlockingHit) {
