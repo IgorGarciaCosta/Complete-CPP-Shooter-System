@@ -59,6 +59,7 @@ void AItem::OnSphereOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* Othe
 		AShooterCharacter* Char = Cast< AShooterCharacter>(OtherActor);
 		if (Char) {
 			Char->IncrementOverlappedItemCount(-1);
+			PickupWidget->SetVisibility(false);
 		}
 	}
 }
