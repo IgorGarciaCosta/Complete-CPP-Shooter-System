@@ -12,6 +12,7 @@
 #include "Particles/ParticleSystemComponent.h"
 #include "Item.h"
 #include "Components/WidgetComponent.h"
+#include "Weapon.h"
 
 
 
@@ -54,6 +55,8 @@ void AShooterCharacter::BeginPlay()
 		DefaultCameraFOV = GetFollowCamera()->FieldOfView;
 		CameraCurrentFOV = DefaultCameraFOV;
 	}
+
+	SpawnDefaultWeapon();
 }
 
 void AShooterCharacter::MoveForward(float value)
@@ -392,6 +395,25 @@ void AShooterCharacter::TraceForItems()
 			
 			
 		}
+	}
+}
+
+void AShooterCharacter::SpawnDefaultWeapon()
+{
+	//check tsubclassof var
+	if (DefaultWeaponClass) {
+		AWeapon* DefaultWeapon = GetWorld()->SpawnActor<AWeapon>(DefaultWeaponClass);
+		
+		//get hand socket
+		const USkeletalMeshSocket* HandSocket = GetMesh()->GetSocketByName(FName("RightHandSocket"));
+		
+		if (IsValid(HandSocket)) {
+			//attach
+			HandSocket->AttachActor(DefaultWeapon, GetMesh());
+		}
+
+		EquippedWeapon = DefaultWeapon;
+	
 	}
 }
 
