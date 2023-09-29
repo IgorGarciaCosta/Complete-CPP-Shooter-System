@@ -38,7 +38,12 @@ AItem::AItem():
 void AItem::BeginPlay()
 {
 	Super::BeginPlay();
-	PickupWidget->SetVisibility(false);
+
+	if (PickupWidget) {
+		PickupWidget->SetVisibility(false);
+
+	}
+	SetStarsActive();
 
 	AreaSphere->OnComponentBeginOverlap.AddDynamic(this, &AItem::OnShpereOverlapBegin);
 	AreaSphere->OnComponentEndOverlap.AddDynamic(this, &AItem::OnSphereOverlapEnd);
@@ -72,5 +77,45 @@ void AItem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AItem::SetStarsActive()
+{
+	for (int i = 0;i < 5;i++) {
+		ActiveStars.Add(false);
+	}
+
+	switch (ItemRarity)
+	{
+		case EItemRarity::EIR_Damage:
+			ActiveStars[0] = true;
+			break;
+		case EItemRarity::EIR_Common:
+			ActiveStars[0] = true;
+			ActiveStars[1] = true;
+			break;
+		case EItemRarity::EIR_Uncommon:
+			ActiveStars[0] = true;
+			ActiveStars[1] = true;
+			ActiveStars[2] = true;
+			break;
+		case EItemRarity::EIR_Rare:
+			ActiveStars[0] = true;
+			ActiveStars[1] = true;
+			ActiveStars[2] = true;
+			ActiveStars[3] = true;
+			break;
+		case EItemRarity::EIR_Legendary:
+			ActiveStars[0] = true;
+			ActiveStars[1] = true;
+			ActiveStars[2] = true;
+			ActiveStars[3] = true;
+			ActiveStars[4] = true;
+			break;
+		case EItemRarity::EIR_MAX:
+			break;
+		default:
+			break;
+	}
 }
 
