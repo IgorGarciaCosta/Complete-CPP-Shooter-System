@@ -13,5 +13,27 @@ UCLASS()
 class SHOOTER_API AWeapon : public AItem
 {
 	GENERATED_BODY()
+
+public:
+	AWeapon();
+
+	virtual void Tick(float DeltaTime) override;
+
+
+	//adds impulse to weapon
+	void ThrowWeapon();
+
+protected:
+	void StopFalling();
+
+private:
+
+	FTimerHandle ThrowWeaponTimer;
+	float ThrowWeaponTime = .7f;
+	bool bFalling = false;
+
+public:
+
+
 	
 };

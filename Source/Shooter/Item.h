@@ -94,6 +94,8 @@ public:
 
 	FORCEINLINE USkeletalMeshComponent* GetItemMesh()const { return ItemMesh; };
 
+	FORCEINLINE EItemState GetItemState()const { return ItemState; };
+
 	void SetItemState(EItemState state);
 
 };
