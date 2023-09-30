@@ -430,6 +430,23 @@ void AShooterCharacter::EquipWeapon(AWeapon* WeaponToEquip)
 	}
 }
 
+void AShooterCharacter::DropWeapon()
+{
+	if (EquippedWeapon) {
+		FDetachmentTransformRules DetachmentTransformRules(EDetachmentRule::KeepWorld, true);
+		EquippedWeapon->GetItemMesh()->DetachFromComponent(DetachmentTransformRules);
+	}
+}
+
+void AShooterCharacter::SelectBtnPressed()
+{
+	DropWeapon();
+}
+
+void AShooterCharacter::SelectBtnReleased()
+{
+}
+
 
 
 // Called every frame
@@ -457,6 +474,9 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("FireBtn", IE_Pressed, this, &AShooterCharacter::FireBtnPressed);
 	PlayerInputComponent->BindAction("FireBtn", IE_Released, this, &AShooterCharacter::FireBtnReleased);
+
+	PlayerInputComponent->BindAction("Select", IE_Pressed, this, &AShooterCharacter::SelectBtnPressed);
+	PlayerInputComponent->BindAction("Select", IE_Released, this, &AShooterCharacter::SelectBtnReleased);
 
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AShooterCharacter::MoveForward);

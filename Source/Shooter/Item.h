@@ -92,6 +92,8 @@ public:
 
 	FORCEINLINE UBoxComponent* GetCollisionBox() const { return CollisionBox; };
 
+	FORCEINLINE USkeletalMeshComponent* GetItemMesh()const { return ItemMesh; };
+
 	void SetItemState(EItemState state);
 
 };

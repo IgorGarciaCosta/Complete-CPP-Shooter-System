@@ -62,6 +62,12 @@ protected:
 	class AWeapon* SpawnDefaultWeapon();
 
 	void EquipWeapon( AWeapon* WeaponToEquip);
+
+	void DropWeapon();
+
+	void SelectBtnPressed();
+	void SelectBtnReleased();
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
