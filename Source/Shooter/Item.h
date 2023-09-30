@@ -82,6 +82,8 @@ private:
 
 	void SetStarsActive();
 
+	void SetItemPrpoerties(EItemState curState);
+
 public:
 	FORCEINLINE UWidgetComponent* GetPickupWidget() const { return PickupWidget; };
 
@@ -90,6 +92,6 @@ public:
 
 	FORCEINLINE UBoxComponent* GetCollisionBox() const { return CollisionBox; };
 
-	FORCEINLINE void SetItemState(EItemState state) { ItemState = state; };
+	void SetItemState(EItemState state);
 
 };
