@@ -59,7 +59,9 @@ protected:
 
 	void TraceForItems();
 
-	void SpawnDefaultWeapon();
+	class AWeapon* SpawnDefaultWeapon();
+
+	void EquipWeapon( AWeapon* WeaponToEquip);
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

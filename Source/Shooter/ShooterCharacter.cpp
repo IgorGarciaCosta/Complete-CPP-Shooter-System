@@ -12,6 +12,8 @@
 #include "Particles/ParticleSystemComponent.h"
 #include "Item.h"
 #include "Components/WidgetComponent.h"
+#include "Components/SphereComponent.h"
+#include "Components/BoxComponent.h"
 #include "Weapon.h"
 
 
@@ -56,7 +58,7 @@ void AShooterCharacter::BeginPlay()
 		CameraCurrentFOV = DefaultCameraFOV;
 	}
 
-	SpawnDefaultWeapon();
+	EquipWeapon(SpawnDefaultWeapon());
 }
 
 void AShooterCharacter::MoveForward(float value)
@@ -398,24 +400,40 @@ void AShooterCharacter::TraceForItems()
 	}
 }
 
-void AShooterCharacter::SpawnDefaultWeapon()
+AWeapon* AShooterCharacter::SpawnDefaultWeapon()
 {
 	//check tsubclassof var
 	if (DefaultWeaponClass) {
-		AWeapon* DefaultWeapon = GetWorld()->SpawnActor<AWeapon>(DefaultWeaponClass);
-		
-		//get hand socket
-		const USkeletalMeshSocket* HandSocket = GetMesh()->GetSocketByName(FName("RightHandSocket"));
-		
-		if (IsValid(HandSocket)) {
-			//attach
-			HandSocket->AttachActor(DefaultWeapon, GetMesh());
-		}
-
-		EquippedWeapon = DefaultWeapon;
+		return GetWorld()->SpawnActor<AWeapon>(DefaultWeaponClass);
 	
 	}
+
+	return nullptr;
 }
+
+void AShooterCharacter::EquipWeapon(AWeapon* WeaponToEquip)
+{
+
+
+	if (WeaponToEquip) {
+
+		//set area sphere to ignore all collision channels
+		WeaponToEquip->GetAreaSphere()->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+		//set boc to ignore all collision channels
+		WeaponToEquip->GetCollisionBox()->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+
+		//get hand socket
+		const USkeletalMeshSocket* HandSocket = GetMesh()->GetSocketByName(FName("RightHandSocket"));
+
+		if (IsValid(HandSocket)) {
+			//attach
+			HandSocket->AttachActor(WeaponToEquip, GetMesh());
+		}
+		EquippedWeapon = WeaponToEquip;
+	}
+}
+
+
 
 // Called every frame
 void AShooterCharacter::Tick(float DeltaTime)
