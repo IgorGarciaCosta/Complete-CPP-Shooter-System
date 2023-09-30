@@ -17,6 +17,20 @@ enum class EItemRarity :uint8 {
 
 	EIR_MAX UMETA(DisplayName = "DefaultMAX")
 };
+
+UENUM(BlueprintType)
+enum class EItemState :uint8 {
+	EIS_Pickup UMETA(DisplayName = "Pickup"),
+	EIS_EquipInterping UMETA(DisplayName = "EquipInterping"),
+	EIS_Pickedup UMETA(DisplayName = "Pickedup"),
+	EIS_Equipped UMETA(DisplayName = "Equipped"),
+	EIS_Falling UMETA(DisplayName = "Falling"),
+	
+
+	EIS_MAX UMETA(DisplayName = "DefaultMAX")
+};
+
+
 UCLASS()
 class SHOOTER_API AItem : public AActor
 {
@@ -63,6 +77,8 @@ private:
 		EItemRarity ItemRarity = EItemRarity::EIR_Common;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		TArray<bool> ActiveStars;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		EItemState ItemState = EItemState::EIS_Pickup;
 
 	void SetStarsActive();
 
@@ -73,5 +89,7 @@ public:
 	FORCEINLINE USphereComponent* GetAreaSphere() const { return AreaSphere; };
 
 	FORCEINLINE UBoxComponent* GetCollisionBox() const { return CollisionBox; };
+
+	FORCEINLINE void SetItemState(EItemState state) { ItemState = state; };
 
 };
