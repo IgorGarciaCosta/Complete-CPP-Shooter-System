@@ -533,3 +533,12 @@ FVector AShooterCharacter::GetCameraInterpLoc()
 	return CameraWoldLoc + CameraForward * CameraInterpDistance + FVector(0.f, 0.f, CameraInterpElevation);
 }
 
+void AShooterCharacter::GetPuckupItem(AItem* item)
+{
+
+	auto weapon = Cast<AWeapon>(item);
+	if (weapon) {
+		SwapWeapon(weapon);
+	}
+}
+

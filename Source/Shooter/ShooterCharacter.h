@@ -194,5 +194,7 @@ public:
 			float GetCrosshairSpreadMult() const;
 
 		FVector GetCameraInterpLoc();
+
+		void GetPuckupItem(AItem* item);
 };
 
