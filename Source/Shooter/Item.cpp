@@ -79,6 +79,7 @@ void AItem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	ItemInterp(DeltaTime);
 }
 
 void AItem::SetStarsActive()
@@ -192,8 +193,40 @@ void AItem::SetItemPrpoerties(EItemState curState)
 
 void AItem::FinishInterping()
 {
+	bInterping = false;
 	if (CharRef) {
 		CharRef->GetPuckupItem(this);
+	}
+}
+
+
+//make item interp logic
+void AItem::ItemInterp(float DeltaTime)
+{
+	if (!bInterping) return;
+
+	if (CharRef && ItemZCurve) {
+
+		//elapsed time since ItemInterpTimerHanlde started
+		const float elapsedTime = GetWorldTimerManager().GetTimerElapsed(ItemInterpTimerHanlde);
+		
+		//get float val corresonding to elapsed time
+		const float CurveValue = ItemZCurve->GetFloatValue(elapsedTime);
+
+		//get item's inital loc, when the curve started
+		FVector ItemLoc = ItemInterpStartLoc;
+
+		//get loc in front of the camera
+		const FVector CameraInterpLocation = CharRef->GetCameraInterpLoc();
+
+		//vector from item to camera
+		const FVector ItemToCamera = FVector(0.f, 0.f, (CameraInterpLocation - ItemLoc).Z);
+
+		//scale factor to multiply with curve value
+		const float DeltaZ = ItemToCamera.Size();
+
+		ItemLoc.Z += CurveValue * DeltaZ;
+		SetActorLocation(ItemLoc, true, nullptr, ETeleportType::TeleportPhysics);
 	}
 }
 

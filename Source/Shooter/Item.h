@@ -86,6 +86,8 @@ private:
 
 	void FinishInterping();
 
+	void ItemInterp(float DeltaTime);
+
 	//item zloc when interping
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		class UCurveFloat* ItemZCurve;
