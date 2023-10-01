@@ -173,6 +173,11 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		AItem* TraceHitItem;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		float CameraInterpDistance = 250.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		float CameraInterpElevation = 60.f;
+
 
 public:
 		FORCEINLINE USpringArmComponent* GetCameraBoom()const { return CameraBoom; }
@@ -187,5 +192,7 @@ public:
 
 		UFUNCTION(BlueprintCallable)
 			float GetCrosshairSpreadMult() const;
+
+		FVector GetCameraInterpLoc();
 };
 

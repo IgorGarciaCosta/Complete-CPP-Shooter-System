@@ -526,3 +526,10 @@ float AShooterCharacter::GetCrosshairSpreadMult() const
 	return CrosshairSpreadMult;
 }
 
+FVector AShooterCharacter::GetCameraInterpLoc()
+{
+	const FVector CameraWoldLoc = FollowCamera->GetComponentLocation();
+	const FVector CameraForward = FollowCamera->GetForwardVector();
+	return CameraWoldLoc + CameraForward * CameraInterpDistance + FVector(0.f, 0.f, CameraInterpElevation);
+}
+
