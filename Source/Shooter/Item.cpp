@@ -178,9 +178,29 @@ void AItem::SetItemPrpoerties(EItemState curState)
 	}
 }
 
+void AItem::FinishInterping()
+{
+	if (CharRef) {
+		CharRef->GetPuckupItem(this);
+	}
+}
+
 void AItem::SetItemState(EItemState state)
 {
 	ItemState = state; 
 	SetItemPrpoerties(state);
+}
+
+void AItem::StartItemCurve(AShooterCharacter* Char)
+{
+	CharRef = Char;
+
+	ItemInterpStartLoc = GetActorLocation();
+
+	bInterping = true;
+
+	SetItemState(EItemState::EIS_EquipInterping);
+
+	GetWorldTimerManager().SetTimer(ItemInterpTimerHanlde, this, &AItem::FinishInterping, zCurveTime);
 }
 

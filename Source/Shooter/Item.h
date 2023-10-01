@@ -84,10 +84,29 @@ private:
 
 	void SetItemPrpoerties(EItemState curState);
 
+	void FinishInterping();
 
 	//item zloc when interping
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		class UCurveFloat* ItemZCurve;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		FVector ItemInterpStartLoc = FVector(0.f);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		FVector CameraTaretLoc = FVector(0.f);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		bool bInterping = false;
+
+	FTimerHandle ItemInterpTimerHanlde;
+
+	//duratiuon of curve and timer
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		float zCurveTime = .7f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		class AShooterCharacter* CharRef;//pointer to access character
 
 public:
 	FORCEINLINE UWidgetComponent* GetPickupWidget() const { return PickupWidget; };
@@ -102,5 +121,7 @@ public:
 	FORCEINLINE EItemState GetItemState()const { return ItemState; };
 
 	void SetItemState(EItemState state);
+
+	void StartItemCurve(AShooterCharacter* Char);
 
 };
