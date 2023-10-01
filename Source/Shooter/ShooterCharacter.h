@@ -68,6 +68,8 @@ protected:
 	void SelectBtnPressed();
 	void SelectBtnReleased();
 
+	void SwapWeapon(AWeapon* WeaponToSwap);
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -168,6 +170,9 @@ private:
 	//set this in BP for the default weapon class
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		TSubclassOf<AWeapon> DefaultWeaponClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		AItem* TraceHitItem;
 
 public:
 		FORCEINLINE USpringArmComponent* GetCameraBoom()const { return CameraBoom; }

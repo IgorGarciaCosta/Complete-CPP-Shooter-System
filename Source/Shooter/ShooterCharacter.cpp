@@ -381,14 +381,14 @@ void AShooterCharacter::TraceForItems()
 
 
 		if (ItemTraceResult.bBlockingHit) {
-			AItem* HitItem = Cast<AItem>(ItemTraceResult.Actor);
+			TraceHitItem = Cast<AItem>(ItemTraceResult.Actor);
 
-			if (HitItem) {
-				LeastHitItem = HitItem;
+			if (TraceHitItem) {
+				LeastHitItem = TraceHitItem;
 
-				if (HitItem->GetPickupWidget()) {
+				if (TraceHitItem->GetPickupWidget()) {
 					//show item's pickup widget
-					HitItem->GetPickupWidget()->SetVisibility(true);
+					TraceHitItem->GetPickupWidget()->SetVisibility(true);
 				}
 			}
 			else if (LeastHitItem) {
@@ -443,11 +443,26 @@ void AShooterCharacter::DropWeapon()
 
 void AShooterCharacter::SelectBtnPressed()
 {
-	DropWeapon();
+
+	if (TraceHitItem) {
+		auto TraceHitWeapon = Cast<AWeapon>(TraceHitItem);
+		SwapWeapon(TraceHitWeapon);
+	}
+
+	else {
+		DropWeapon();
+	}
+	
 }
 
 void AShooterCharacter::SelectBtnReleased()
 {
+}
+
+void AShooterCharacter::SwapWeapon(AWeapon* WeaponToSwap)
+{
+	DropWeapon();
+	EquipWeapon(WeaponToSwap);
 }
 
 
@@ -464,9 +479,7 @@ void AShooterCharacter::Tick(float DeltaTime)
 	CalculateCrosshairSpread(DeltaTime);
 
 	TraceForItems();
-	
 
-	
 }
 
 // Called to bind functionality to input
