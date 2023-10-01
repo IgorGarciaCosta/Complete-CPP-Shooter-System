@@ -84,6 +84,11 @@ private:
 
 	void SetItemPrpoerties(EItemState curState);
 
+
+	//item zloc when interping
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		class UCurveFloat* ItemZCurve;
+
 public:
 	FORCEINLINE UWidgetComponent* GetPickupWidget() const { return PickupWidget; };
 
