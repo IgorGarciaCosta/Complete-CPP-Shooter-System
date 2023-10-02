@@ -7,6 +7,7 @@
 #include "Components/WidgetComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "ShooterCharacter.h"
+#include "Camera/CameraComponent.h"
 
 
 
@@ -235,6 +236,12 @@ void AItem::ItemInterp(float DeltaTime)
 
 		ItemLoc.Z += CurveValue * DeltaZ;
 		SetActorLocation(ItemLoc, true, nullptr, ETeleportType::TeleportPhysics);
+
+		//cam rot
+		const FRotator CameraRotation = CharRef->GetFollowCamera()->GetComponentRotation();
+		//cam rot + initial yaw offset
+		FRotator ItemRot{ 0.f, CameraRotation.Yaw + InterpInitilaYawOffset, 0.f };
+		SetActorRotation(ItemRot, ETeleportType::TeleportPhysics);
 	}
 }
 
@@ -255,5 +262,12 @@ void AItem::StartItemCurve(AShooterCharacter* Char)
 	SetItemState(EItemState::EIS_EquipInterping);
 
 	GetWorldTimerManager().SetTimer(ItemInterpTimerHanlde, this, &AItem::FinishInterping, zCurveTime);
+
+
+	//get initial yaw values of camera and item
+	const float CameraRotationYaw = CharRef->GetFollowCamera()->GetComponentRotation().Yaw;
+	const float ItemRotYaw = GetActorRotation().Yaw;
+
+	InterpInitilaYawOffset =  ItemRotYaw - CameraRotationYaw;
 }
 

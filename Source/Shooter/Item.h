@@ -114,6 +114,10 @@ private:
 	float ItemInterpX = 0.f;
 	float ItemIntewrpY = 0.f;
 
+
+	//between camera and interping item
+	float InterpInitilaYawOffset = 0.f;
+
 public:
 	FORCEINLINE UWidgetComponent* GetPickupWidget() const { return PickupWidget; };
 
