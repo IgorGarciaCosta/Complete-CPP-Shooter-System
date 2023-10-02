@@ -198,6 +198,9 @@ void AItem::FinishInterping()
 	if (CharRef) {
 		CharRef->GetPuckupItem(this);
 	}
+	//set scale back to normal
+	SetActorScale3D(FVector(1.f));
+
 }
 
 
@@ -242,6 +245,11 @@ void AItem::ItemInterp(float DeltaTime)
 		//cam rot + initial yaw offset
 		FRotator ItemRot{ 0.f, CameraRotation.Yaw + InterpInitilaYawOffset, 0.f };
 		SetActorRotation(ItemRot, ETeleportType::TeleportPhysics);
+
+		if (ItemScaleCurve) {
+			const float ScaleCurveValue = ItemScaleCurve->GetFloatValue(elapsedTime);
+			SetActorScale3D(FVector(ScaleCurveValue, ScaleCurveValue, ScaleCurveValue));
+		}
 	}
 }
 

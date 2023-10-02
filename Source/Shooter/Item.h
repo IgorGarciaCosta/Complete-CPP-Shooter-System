@@ -118,6 +118,11 @@ private:
 	//between camera and interping item
 	float InterpInitilaYawOffset = 0.f;
 
+
+	//scale item during interp
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		UCurveFloat* ItemScaleCurve;
+
 public:
 	FORCEINLINE UWidgetComponent* GetPickupWidget() const { return PickupWidget; };
 
