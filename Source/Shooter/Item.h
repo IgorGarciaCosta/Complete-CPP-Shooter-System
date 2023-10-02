@@ -110,6 +110,10 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		class AShooterCharacter* CharRef;//pointer to access character
 
+
+	float ItemInterpX = 0.f;
+	float ItemIntewrpY = 0.f;
+
 public:
 	FORCEINLINE UWidgetComponent* GetPickupWidget() const { return PickupWidget; };
 

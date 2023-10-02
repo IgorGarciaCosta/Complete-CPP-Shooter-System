@@ -225,6 +225,14 @@ void AItem::ItemInterp(float DeltaTime)
 		//scale factor to multiply with curve value
 		const float DeltaZ = ItemToCamera.Size();
 
+		const FVector curLoc = GetActorLocation();
+		const float InterpXVal = FMath::FInterpTo(curLoc.X, CameraInterpLocation.X, DeltaTime, 30.0f);
+		const float InterpYVal = FMath::FInterpTo(curLoc.Y, CameraInterpLocation.Y, DeltaTime, 30.0f);
+
+		//set x and y of itemLoc to interpolated calues
+		ItemLoc.X = InterpXVal;
+		ItemLoc.Y = InterpYVal;
+
 		ItemLoc.Z += CurveValue * DeltaZ;
 		SetActorLocation(ItemLoc, true, nullptr, ETeleportType::TeleportPhysics);
 	}
