@@ -126,47 +126,59 @@ void AShooterCharacter::LookUp(float Value)
 
 void AShooterCharacter::FireWeapon()
 {
-	if (FireSound) {
-		UGameplayStatics::PlaySound2D(this, FireSound);
-	}
-	const USkeletalMeshSocket* MuzzleSocket = EquippedWeapon->GetItemMesh()->GetSocketByName("muzzleSocket");
+	if (CombatState != ECombatState::ECSUnnocupied) return;
 
-	if (MuzzleSocket) {
-		const FTransform SocketTransf = MuzzleSocket->GetSocketTransform(EquippedWeapon->GetItemMesh());
+	if (WeaponHasAmmo()) {
+		if (EquippedWeapon == nullptr) return;
 
-		if (MuzzleFlash) {
-			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), MuzzleFlash, SocketTransf);
+		//fire sound
+		if (FireSound) {
+			UGameplayStatics::PlaySound2D(this, FireSound);
 		}
 
-		FVector BeamEnd;
-		bool bBeamEnd = GetBeamEndLoc(SocketTransf.GetLocation(), BeamEnd);
-
-		if (bBeamEnd) {
-			if (ImpactParticles) {
-				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactParticles, BeamEnd);
+		const USkeletalMeshSocket* MuzzleSocket = EquippedWeapon->GetItemMesh()->GetSocketByName("muzzleSocket");
+		if (MuzzleSocket) {
+			const FTransform SocketTransf = MuzzleSocket->GetSocketTransform(EquippedWeapon->GetItemMesh());
+			
+			//muzzle flash
+			if (MuzzleFlash) {
+				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), MuzzleFlash, SocketTransf);
 			}
-			UParticleSystemComponent* Beam = UGameplayStatics::SpawnEmitterAtLocation(
-				GetWorld(),
-				BeamParticles,
-				SocketTransf);
-			if (Beam) {
-				Beam->SetVectorParameter(FName("Target"), BeamEnd);
+
+			//beam particles
+			FVector BeamEnd;
+			bool bBeamEnd = GetBeamEndLoc(SocketTransf.GetLocation(), BeamEnd);
+			if (bBeamEnd) {
+				if (ImpactParticles) {
+					UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactParticles, BeamEnd);
+				}
+				UParticleSystemComponent* Beam = UGameplayStatics::SpawnEmitterAtLocation(
+					GetWorld(),
+					BeamParticles,
+					SocketTransf);
+				if (Beam) {
+					Beam->SetVectorParameter(FName("Target"), BeamEnd);
+				}
 			}
 		}
-	}
-	UAnimInstance* AnimInstange = GetMesh()->GetAnimInstance();
-	if (AnimInstange && HipFireMontage) {
-		AnimInstange->Montage_Play(HipFireMontage);
-		AnimInstange->Montage_JumpToSection(FName("StartFire"));
-	}
 
-
-	//start bullet fire timer for crosshairs
-	StartCrosshairBulletFire();
-
-	if (EquippedWeapon) {
+		//fire anim
+		UAnimInstance* AnimInstange = GetMesh()->GetAnimInstance();
+		if (AnimInstange && HipFireMontage) {
+			AnimInstange->Montage_Play(HipFireMontage);
+			AnimInstange->Montage_JumpToSection(FName("StartFire"));
+		}
 		EquippedWeapon->DecrementAmmo();
+		StartFireTimer();
+		////start bullet fire timer for crosshairs
+		//StartCrosshairBulletFire();
+
+		//if (EquippedWeapon) {
+		//	EquippedWeapon->DecrementAmmo();
+		//}
 	}
+
+	
 }
 
 bool AShooterCharacter::GetBeamEndLoc(const FVector& MuzzleSocketLocation, FVector& OutBeamLoc)
@@ -307,9 +319,8 @@ void AShooterCharacter::StartCrosshairBulletFire()
 
 void AShooterCharacter::FireBtnPressed()
 {
-	if (!WeaponHasAmmo()) return;
 	bFireBtnPressed = true;
-	StartFireTimer();
+	FireWeapon();
 }
 
 void AShooterCharacter::FireBtnReleased()
@@ -320,7 +331,14 @@ void AShooterCharacter::FireBtnReleased()
 
 void AShooterCharacter::StartFireTimer()
 {
-	if (bShouldFire) {
+	SetCombatState(ECombatState::ECSFireTimerInProgress);
+	GetWorldTimerManager().SetTimer(
+		AutoFreTimerHandle,
+		this,
+		&AShooterCharacter::AutoFireReset,
+		AutomaticFireRate);
+
+	/*if (bShouldFire) {
 		FireWeapon();
 		bShouldFire = false;
 		GetWorldTimerManager().SetTimer(
@@ -328,16 +346,27 @@ void AShooterCharacter::StartFireTimer()
 		this, 
 		&AShooterCharacter::AutoFireReset,
 		AutomaticFireRate);
-	}
+	}*/
 }
 
 void AShooterCharacter::AutoFireReset()
 {
-	if (!WeaponHasAmmo()) return;
+	SetCombatState(ECombatState::ECSUnnocupied);
+	if (WeaponHasAmmo()) {
+		if (bFireBtnPressed) {
+			FireWeapon();
+		}
+	}
+
+	else {
+		//reload
+	}
+
+	/*if (!WeaponHasAmmo()) return;
 	bShouldFire = true;
 	if (bFireBtnPressed) {
 		StartFireTimer();
-	}
+	}*/
 }
 
 bool AShooterCharacter::TraceUnderCrosshairs(FHitResult& OutHitResult, FVector& OutHitLocation)

@@ -14,6 +14,15 @@ enum class EAmmoType :uint8 {
 	EAT_MAX UMETA(DisplayName = "DefaultMAX")
 };
 
+UENUM(BlueprintType)
+enum class ECombatState :uint8 {
+	ECSUnnocupied UMETA(DisplayName = "Unnocupied"),
+	ECSFireTimerInProgress UMETA(DisplayName = "FireTimerInProgress"),
+	ECSReloading UMETA(DisplayName = "Reloading"),
+
+	ECS_MAX UMETA(DisplayName = "DefaultMAX")
+};
+
 UCLASS()
 class SHOOTER_API AShooterCharacter : public ACharacter
 {
@@ -199,6 +208,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		int32 StartingARAmmo = 120;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		ECombatState CombatState = ECombatState::ECSUnnocupied;
+
 
 public:
 		FORCEINLINE USpringArmComponent* GetCameraBoom()const { return CameraBoom; }
@@ -208,6 +220,8 @@ public:
 		FORCEINLINE bool GetAIming() const { return bAiming; }
 
 		FORCEINLINE int8 GetOverlappedItemCount() const { return OverlappedItemCount; };
+
+		FORCEINLINE void SetCombatState(ECombatState state) { CombatState = state; };
 
 		void IncrementOverlappedItemCount(int8 Amount);
 
