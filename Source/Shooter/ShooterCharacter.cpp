@@ -129,10 +129,10 @@ void AShooterCharacter::FireWeapon()
 	if (FireSound) {
 		UGameplayStatics::PlaySound2D(this, FireSound);
 	}
-	const USkeletalMeshSocket* MuzzleSocket = GetMesh()->GetSocketByName("muzzleSocket");
+	const USkeletalMeshSocket* MuzzleSocket = EquippedWeapon->GetItemMesh()->GetSocketByName("muzzleSocket");
 
 	if (MuzzleSocket) {
-		const FTransform SocketTransf = MuzzleSocket->GetSocketTransform(GetMesh());
+		const FTransform SocketTransf = MuzzleSocket->GetSocketTransform(EquippedWeapon->GetItemMesh());
 
 		if (MuzzleFlash) {
 			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), MuzzleFlash, SocketTransf);
