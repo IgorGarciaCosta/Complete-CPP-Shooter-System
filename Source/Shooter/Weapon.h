@@ -32,7 +32,7 @@ private:
 	float ThrowWeaponTime = .7f;
 	bool bFalling = false;
 
-	UPROPERTY(EditAnyehre, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		int32 Ammo = 0;
 
 public:
