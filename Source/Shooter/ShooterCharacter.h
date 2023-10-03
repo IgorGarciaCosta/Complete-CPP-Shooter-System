@@ -91,6 +91,10 @@ protected:
 
 	bool WeaponHasAmmo();
 
+	void PlayFireSound();
+	void SendBullet();
+	void PlayGunfireMontage();
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
