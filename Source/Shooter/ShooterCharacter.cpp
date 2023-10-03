@@ -163,6 +163,10 @@ void AShooterCharacter::FireWeapon()
 
 	//start bullet fire timer for crosshairs
 	StartCrosshairBulletFire();
+
+	if (EquippedWeapon) {
+		EquippedWeapon->DecrementAmmo();
+	}
 }
 
 bool AShooterCharacter::GetBeamEndLoc(const FVector& MuzzleSocketLocation, FVector& OutBeamLoc)
@@ -303,6 +307,7 @@ void AShooterCharacter::StartCrosshairBulletFire()
 
 void AShooterCharacter::FireBtnPressed()
 {
+	if (!WeaponHasAmmo()) return;
 	bFireBtnPressed = true;
 	StartFireTimer();
 }
@@ -328,6 +333,7 @@ void AShooterCharacter::StartFireTimer()
 
 void AShooterCharacter::AutoFireReset()
 {
+	if (!WeaponHasAmmo()) return;
 	bShouldFire = true;
 	if (bFireBtnPressed) {
 		StartFireTimer();
@@ -472,6 +478,13 @@ void AShooterCharacter::InitializeAmmoMap()
 	AmmoMap.Add(EAmmoType::EAT_9mm, Starting9mmAmmo);
 	AmmoMap.Add(EAmmoType::EAT_AssountRifle, StartingARAmmo);
 
+}
+
+bool AShooterCharacter::WeaponHasAmmo()
+{
+	if (EquippedWeapon == nullptr) return false;
+
+	return EquippedWeapon->GetAmmo()>0;
 }
 
 

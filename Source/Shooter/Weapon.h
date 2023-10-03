@@ -32,8 +32,13 @@ private:
 	float ThrowWeaponTime = .7f;
 	bool bFalling = false;
 
+	UPROPERTY(EditAnyehre, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		int32 Ammo = 0;
+
 public:
 
+	FORCEINLINE int32 GetAmmo()const { return Ammo; };
 
+	void DecrementAmmo();
 	
 };
