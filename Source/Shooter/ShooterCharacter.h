@@ -95,6 +95,8 @@ protected:
 	void SendBullet();
 	void PlayGunfireMontage();
 
+	void ReloadWeapon();
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -215,6 +217,10 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		ECombatState CombatState = ECombatState::ECSUnnocupied;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		UAnimMontage* ReloadMontage;
+
+
 
 public:
 		FORCEINLINE USpringArmComponent* GetCameraBoom()const { return CameraBoom; }
@@ -235,5 +241,8 @@ public:
 		FVector GetCameraInterpLoc();
 
 		void GetPuckupItem(AItem* item);
+
+		UFUNCTION(BlueprintCallable)
+			void FinishReloading();
 };
 

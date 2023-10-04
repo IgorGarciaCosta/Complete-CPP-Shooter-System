@@ -310,6 +310,7 @@ void AShooterCharacter::AutoFireReset()
 
 	else {
 		//reload
+		ReloadWeapon();
 	}
 }
 
@@ -506,6 +507,26 @@ void AShooterCharacter::PlayGunfireMontage()
 	}
 }
 
+void AShooterCharacter::ReloadWeapon()
+{
+	if (CombatState != ECombatState::ECSUnnocupied) return;
+
+
+	//do we have ammo of the correct type?
+	if (true) {
+		//play reload montage
+		FName MontageSection("Reload SMG");
+
+		UAnimInstance* AnimInst = GetMesh()->GetAnimInstance();
+		if (AnimInst && ReloadMontage) {
+			AnimInst->Montage_Play(ReloadMontage);
+			AnimInst->Montage_JumpToSection(MontageSection);
+		}
+
+		//reload
+	}
+}
+
 
 
 // Called every frame
@@ -531,6 +552,8 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("FireBtn", IE_Pressed, this, &AShooterCharacter::FireBtnPressed);
 	PlayerInputComponent->BindAction("FireBtn", IE_Released, this, &AShooterCharacter::FireBtnReleased);
+	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &AShooterCharacter::ReloadWeapon);
+
 
 	PlayerInputComponent->BindAction("Select", IE_Pressed, this, &AShooterCharacter::SelectBtnPressed);
 	PlayerInputComponent->BindAction("Select", IE_Released, this, &AShooterCharacter::SelectBtnReleased);
@@ -581,5 +604,12 @@ void AShooterCharacter::GetPuckupItem(AItem* item)
 	if (weapon) {
 		SwapWeapon(weapon);
 	}
+}
+
+void AShooterCharacter::FinishReloading()
+{
+	//udate ammo map
+
+	SetCombatState(ECombatState::ECSUnnocupied);
 }
 
