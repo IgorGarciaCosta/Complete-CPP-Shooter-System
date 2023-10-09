@@ -511,11 +511,14 @@ void AShooterCharacter::ReloadWeapon()
 {
 	if (CombatState != ECombatState::ECSUnnocupied) return;
 
+	if (EquippedWeapon == nullptr) return;
 
 	//do we have ammo of the correct type?
-	if (true) {
+	if (CarryingAmmo()) {
+		SetCombatState(ECombatState::ECSReloading);
+
 		//play reload montage
-		FName MontageSection("Reload SMG");
+		FName MontageSection = EquippedWeapon->GetReloadMontageSection();
 
 		UAnimInstance* AnimInst = GetMesh()->GetAnimInstance();
 		if (AnimInst && ReloadMontage) {
@@ -525,6 +528,17 @@ void AShooterCharacter::ReloadWeapon()
 
 		//reload
 	}
+}
+
+bool AShooterCharacter::CarryingAmmo()
+{
+	if (EquippedWeapon == nullptr) return false;
+
+	auto AmmoType = EquippedWeapon->GetAmmoType();
+	if (AmmoMap.Contains(AmmoType)) {
+		return AmmoMap[AmmoType] > 0;
+	}
+	return false;
 }
 
 
@@ -608,8 +622,31 @@ void AShooterCharacter::GetPuckupItem(AItem* item)
 
 void AShooterCharacter::FinishReloading()
 {
-	//udate ammo map
-
+	
 	SetCombatState(ECombatState::ECSUnnocupied);
+
+	//udate ammo map
+	if (EquippedWeapon == nullptr) return;
+
+	const auto AmmoType = EquippedWeapon->GetAmmoType();
+
+	if (AmmoMap.Contains(AmmoType)) {
+		int32 CarriedAmmo = AmmoMap[AmmoType];//amount of carries ammo of this type
+
+		const int32 magEMptySpace = EquippedWeapon->GetMagazineCapacity() - EquippedWeapon -> GetAmmo();
+
+		if (magEMptySpace > CarriedAmmo) {
+			//reload magazinewith all ammo im carrying
+			EquippedWeapon->ReloadAmmo(CarriedAmmo);
+			CarriedAmmo = 0;
+		}
+
+		else {
+			//fill magazine
+			EquippedWeapon->ReloadAmmo(magEMptySpace);
+			CarriedAmmo -= magEMptySpace;
+		}
+		AmmoMap.Add(AmmoType, CarriedAmmo);
+	}
 }
 

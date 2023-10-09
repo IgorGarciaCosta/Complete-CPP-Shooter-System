@@ -59,3 +59,9 @@ void AWeapon::DecrementAmmo()
 		--Ammo;
 	}
 }
+
+void AWeapon::ReloadAmmo(int32 amount)
+{
+	checkf(Ammo+amount<=MagazineCapacity, TEXT("Attempted top reload with more than magazine capacity"));
+	Ammo += amount;
+}
