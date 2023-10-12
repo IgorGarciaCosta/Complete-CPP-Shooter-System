@@ -93,6 +93,14 @@ protected:
 
 	bool CarryingAmmo();
 
+
+	//called from animBP with grab clip notify
+	UFUNCTION(BlueprintCallable)
+		void GrabClip();
+
+	UFUNCTION(BlueprintCallable)
+		void ReleaseClip();
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -229,6 +237,8 @@ public:
 
 		FORCEINLINE void SetCombatState(ECombatState state) { CombatState = state; };
 
+		
+
 		void IncrementOverlappedItemCount(int8 Amount);
 
 		UFUNCTION(BlueprintCallable)
@@ -240,5 +250,12 @@ public:
 
 		UFUNCTION(BlueprintCallable)
 			void FinishReloading();
+
+		//clip transf. when we first grab it during reloading
+		UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		FTransform ClipTransform;
+
+		UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+			USceneComponent* HandSceneComponent;
 };
 

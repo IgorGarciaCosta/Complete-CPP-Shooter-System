@@ -59,6 +59,11 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		FName ReloadMontageSection = FName(TEXT("ReloadSMG"));
 
+	bool bMovingClip = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		FName ClipBoneName = TEXT("smg_clip");
+
 public:
 
 	FORCEINLINE int32 GetAmmo()const { return Ammo; };
@@ -71,6 +76,9 @@ public:
 
 	FORCEINLINE FName GetReloadMontageSection()const { return ReloadMontageSection; };
 
+	FORCEINLINE FName GetClipBoneName()const { return ClipBoneName; };
+
+	FORCEINLINE void SetMovingClip(bool val) { bMovingClip = val; }
 
 	void DecrementAmmo();
 	

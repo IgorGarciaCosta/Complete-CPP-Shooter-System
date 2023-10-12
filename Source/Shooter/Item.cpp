@@ -233,7 +233,7 @@ void AItem::ItemInterp(float DeltaTime)
 		const float InterpXVal = FMath::FInterpTo(curLoc.X, CameraInterpLocation.X, DeltaTime, 30.0f);
 		const float InterpYVal = FMath::FInterpTo(curLoc.Y, CameraInterpLocation.Y, DeltaTime, 30.0f);
 
-		//set x and y of itemLoc to interpolated calues
+		//set x and y of itemLoc to interpolated values
 		ItemLoc.X = InterpXVal;
 		ItemLoc.Y = InterpYVal;
 
