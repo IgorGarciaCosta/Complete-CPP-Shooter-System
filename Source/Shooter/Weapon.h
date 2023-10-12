@@ -59,7 +59,8 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		FName ReloadMontageSection = FName(TEXT("ReloadSMG"));
 
-	bool bMovingClip = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		bool bMovingClip = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		FName ClipBoneName = TEXT("smg_clip");
