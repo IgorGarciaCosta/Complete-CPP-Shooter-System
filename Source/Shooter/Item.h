@@ -123,9 +123,18 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		UCurveFloat* ItemScaleCurve;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		class USoundCue* PickupSound;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		class USoundCue* EquipSound;
+
 public:
 	FORCEINLINE UWidgetComponent* GetPickupWidget() const { return PickupWidget; };
 
+	FORCEINLINE USoundCue* GetPickupSound() const { return PickupSound; };
+
+	FORCEINLINE USoundCue* GetEquipSound() const { return EquipSound; };
 
 	FORCEINLINE USphereComponent* GetAreaSphere() const { return AreaSphere; };
 
