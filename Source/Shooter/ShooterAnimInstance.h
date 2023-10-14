@@ -22,6 +22,9 @@ public:
 
 	virtual void NativeInitializeAnimation() override;
 
+protected:
+	void TurnInPlace();
+
 
 private:
 
@@ -30,22 +33,29 @@ private:
 
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	float Speed;
+	float Speed = 0.f;
 
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	bool bIsInAir;
+	bool bIsInAir = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	bool bIsAccelerating;
+	bool bIsAccelerating = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		float MovementOffsetYaw;
+		float MovementOffsetYaw = 0.f;
 
 
 	//get offsetyaw of the frame before we stopped moving
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		float LastMovementOffsetYaw;
+		float LastMovementOffsetYaw = 0.f;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		bool bAiming = false;
+
+	float CharYaw = 0.f;
+
+	float CharYawLastFrame = 0.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		float RootYawOffset = 0.f;
 };

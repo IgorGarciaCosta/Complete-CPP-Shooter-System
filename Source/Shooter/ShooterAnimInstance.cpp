@@ -44,9 +44,32 @@ void UShooterAnimInstance::UpdateAnimationProperties(float DeltaTime)
 
 		bAiming = ShooterChar->GetAIming();
 	}
+	TurnInPlace();
 }
 
 void UShooterAnimInstance::NativeInitializeAnimation()
 {
 	ShooterChar = Cast<AShooterCharacter>(TryGetPawnOwner());
+}
+
+void UShooterAnimInstance::TurnInPlace()
+{
+	if (ShooterChar == nullptr) return;
+
+	if (Speed > 0) {
+		//char moving, dont durn in place
+	}
+
+	else {
+		CharYawLastFrame = CharYaw;
+		CharYaw = ShooterChar->GetActorRotation().Yaw;
+
+		const float yawDelta = CharYaw - CharYawLastFrame;
+
+		RootYawOffset -= yawDelta;
+
+		GEngine->AddOnScreenDebugMessage(1, -1, FColor::Blue, FString::Printf(TEXT("Char yaw: %f"), CharYaw));
+		GEngine->AddOnScreenDebugMessage(2, -1, FColor::Red, FString::Printf(TEXT("RootYawOffset: %f"), RootYawOffset));
+
+	}
 }
