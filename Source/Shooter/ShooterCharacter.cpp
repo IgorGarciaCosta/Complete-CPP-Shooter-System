@@ -21,7 +21,7 @@
 // Sets default values
 AShooterCharacter::AShooterCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>("CameraBoom");
@@ -54,7 +54,7 @@ AShooterCharacter::AShooterCharacter()
 void AShooterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	if (FollowCamera) {
 		DefaultCameraFOV = GetFollowCamera()->FieldOfView;
 		CameraCurrentFOV = DefaultCameraFOV;
@@ -66,12 +66,12 @@ void AShooterCharacter::BeginPlay()
 
 void AShooterCharacter::MoveForward(float value)
 {
-	if (Controller != nullptr && value!=0.f) {
+	if (Controller != nullptr && value != 0.f) {
 		//find which way is forward
 		const FRotator Rotation{ Controller->GetControlRotation() };
 		const FRotator YawRotation{ 0, Rotation.Yaw, 0 };
 
-		const FVector Direction{ FRotationMatrix{YawRotation}.GetUnitAxis(EAxis::X)};
+		const FVector Direction{ FRotationMatrix{YawRotation}.GetUnitAxis(EAxis::X) };
 
 		AddMovementInput(Direction, value);
 	}
@@ -129,18 +129,18 @@ void AShooterCharacter::LookUp(float Value)
 void AShooterCharacter::FireWeapon()
 {
 	if (WeaponHasAmmo() && EquippedWeapon != nullptr && CombatState == ECombatState::ECSUnnocupied) {
-		
+
 		PlayFireSound();
 
 		SendBullet();
 
 		PlayGunfireMontage();
-		
+
 		EquippedWeapon->DecrementAmmo();
 		StartFireTimer();
 	}
 
-	
+
 }
 
 bool AShooterCharacter::GetBeamEndLoc(const FVector& MuzzleSocketLocation, FVector& OutBeamLoc)
@@ -158,7 +158,7 @@ bool AShooterCharacter::GetBeamEndLoc(const FVector& MuzzleSocketLocation, FVect
 	//perform trace from gun barrel
 	FHitResult WeaponTraceHit;
 	const FVector WeaponTraceStart = MuzzleSocketLocation;
-	const FVector StartToEnd = OutBeamLoc- MuzzleSocketLocation;
+	const FVector StartToEnd = OutBeamLoc - MuzzleSocketLocation;
 	const FVector WeaponTraceEnd = MuzzleSocketLocation + StartToEnd * 1.25f;
 	//line trace from gun barrel to hit point
 	GetWorld()->LineTraceSingleByChannel(WeaponTraceHit, WeaponTraceStart, WeaponTraceEnd, ECollisionChannel::ECC_Visibility);
@@ -221,11 +221,11 @@ void AShooterCharacter::CalculateCrosshairSpread(float DeltaTime)
 		WalkSPeedRange,
 		VelMultRange,
 		Velocity.Size()
-		);
+	);
 
 	if (GetCharacterMovement()->IsFalling()) {
 		//spread he crisshairs slowly while in air
-		CrosshairInAirFactor = FMath::FInterpTo(CrosshairInAirFactor, 2.25f, DeltaTime,2.25f);
+		CrosshairInAirFactor = FMath::FInterpTo(CrosshairInAirFactor, 2.25f, DeltaTime, 2.25f);
 	}
 	else {
 		//shrink crisshairs quickly when fall
@@ -288,7 +288,7 @@ void AShooterCharacter::FireBtnPressed()
 void AShooterCharacter::FireBtnReleased()
 {
 	bFireBtnPressed = false;
-	
+
 }
 
 void AShooterCharacter::StartFireTimer()
@@ -377,8 +377,8 @@ void AShooterCharacter::TraceForItems()
 			else if (LeastHitItem) {
 				LeastHitItem->GetPickupWidget()->SetVisibility(false);
 			}
-			
-			
+
+
 		}
 	}
 }
@@ -388,7 +388,7 @@ AWeapon* AShooterCharacter::SpawnDefaultWeapon()
 	//check tsubclassof var
 	if (DefaultWeaponClass) {
 		return GetWorld()->SpawnActor<AWeapon>(DefaultWeaponClass);
-	
+
 	}
 
 	return nullptr;
@@ -400,7 +400,7 @@ void AShooterCharacter::EquipWeapon(AWeapon* WeaponToEquip)
 
 	if (WeaponToEquip) {
 
-		
+
 		//get hand socket
 		const USkeletalMeshSocket* HandSocket = GetMesh()->GetSocketByName(FName("RightHandSocket"));
 
@@ -434,7 +434,7 @@ void AShooterCharacter::SelectBtnPressed()
 			UGameplayStatics::PlaySound2D(this, TraceHitItem->GetPickupSound());
 		}
 	}
-	
+
 }
 
 void AShooterCharacter::SelectBtnReleased()
@@ -458,7 +458,7 @@ bool AShooterCharacter::WeaponHasAmmo()
 {
 	if (EquippedWeapon == nullptr) return false;
 
-	return EquippedWeapon->GetAmmo()>0;
+	return EquippedWeapon->GetAmmo() > 0;
 }
 
 void AShooterCharacter::PlayFireSound()
@@ -543,8 +543,8 @@ bool AShooterCharacter::CarryingAmmo()
 
 void AShooterCharacter::GrabClip()
 {
-	
-	if (EquippedWeapon == nullptr || HandSceneComponent==nullptr) return;
+
+	if (EquippedWeapon == nullptr || HandSceneComponent == nullptr) return;
 
 	int32 ClipBoneIndex = EquippedWeapon->GetItemMesh()->GetBoneIndex(EquippedWeapon->GetClipBoneName());
 	ClipTransform = EquippedWeapon->GetItemMesh()->GetBoneTransform(ClipBoneIndex);
@@ -645,7 +645,7 @@ void AShooterCharacter::GetPuckupItem(AItem* item)
 
 void AShooterCharacter::FinishReloading()
 {
-	
+
 	SetCombatState(ECombatState::ECSUnnocupied);
 
 	//udate ammo map
@@ -656,7 +656,7 @@ void AShooterCharacter::FinishReloading()
 	if (AmmoMap.Contains(AmmoType)) {
 		int32 CarriedAmmo = AmmoMap[AmmoType];//amount of carries ammo of this type
 
-		const int32 magEMptySpace = EquippedWeapon->GetMagazineCapacity() - EquippedWeapon -> GetAmmo();
+		const int32 magEMptySpace = EquippedWeapon->GetMagazineCapacity() - EquippedWeapon->GetAmmo();
 
 		if (magEMptySpace > CarriedAmmo) {
 			//reload magazinewith all ammo im carrying

@@ -7,7 +7,7 @@
 #include "ShooterAnimInstance.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class SHOOTER_API UShooterAnimInstance : public UAnimInstance
@@ -28,18 +28,22 @@ protected:
 
 private:
 
+	float RotationCurve;
+
+	float RotationCurveLastFrame;
+
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	class AShooterCharacter* ShooterChar;
+		class AShooterCharacter* ShooterChar;
 
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	float Speed = 0.f;
-
-	UPROPERTY(VisibleAnywhere,BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	bool bIsInAir = false;
+		float Speed = 0.f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	bool bIsAccelerating = false;
+		bool bIsInAir = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		bool bIsAccelerating = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		float MovementOffsetYaw = 0.f;
@@ -48,7 +52,7 @@ private:
 	//get offsetyaw of the frame before we stopped moving
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		float LastMovementOffsetYaw = 0.f;
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		bool bAiming = false;
 
