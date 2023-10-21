@@ -60,6 +60,11 @@ void AWeapon::DecrementAmmo()
 	}
 }
 
+bool AWeapon::ClipIsFull()
+{
+	return Ammo>=MagazineCapacity;
+}
+
 void AWeapon::ReloadAmmo(int32 amount)
 {
 	checkf(Ammo+amount<=MagazineCapacity, TEXT("Attempted top reload with more than magazine capacity"));

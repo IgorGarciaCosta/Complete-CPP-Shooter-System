@@ -13,6 +13,7 @@ void UShooterAnimInstance::UpdateAnimationProperties(float DeltaTime)
 		ShooterChar = Cast<AShooterCharacter>(TryGetPawnOwner());
 	}
 	if (ShooterChar) {
+		bReloading = ShooterChar->GetCombatState() == ECombatState::ECSReloading;
 
 		//get lateral speed
 		FVector Velocity = ShooterChar->GetVelocity();
@@ -55,6 +56,9 @@ void UShooterAnimInstance::NativeInitializeAnimation()
 void UShooterAnimInstance::TurnInPlace()
 {
 	if (ShooterChar == nullptr) return;
+
+	Pitch = ShooterChar->GetBaseAimRotation().Pitch;
+
 
 	if (Speed > 0) {
 		//char moving, dont durn in place

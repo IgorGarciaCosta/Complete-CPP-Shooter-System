@@ -33,6 +33,12 @@ private:
 	float RotationCurveLastFrame;
 
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		float Pitch = 0.f;
+
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		bool bReloading = false;
+
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 		class AShooterCharacter* ShooterChar;
 
 

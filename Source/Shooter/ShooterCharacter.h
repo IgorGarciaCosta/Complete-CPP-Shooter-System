@@ -237,7 +237,8 @@ public:
 
 		FORCEINLINE void SetCombatState(ECombatState state) { CombatState = state; };
 
-		
+		FORCEINLINE ECombatState GetCombatState() const { return CombatState; }
+
 
 		void IncrementOverlappedItemCount(int8 Amount);
 
