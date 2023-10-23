@@ -44,6 +44,21 @@ void UShooterAnimInstance::UpdateAnimationProperties(float DeltaTime)
 		}
 
 		bAiming = ShooterChar->GetAIming();
+
+		if (bReloading) {
+			OffsetState = EOffsetState::EOSReloading;
+		}
+
+		else if (bIsInAir) {
+			OffsetState = EOffsetState::EOSInAir;
+		}
+
+		else if (ShooterChar->GetAIming()) {
+			OffsetState = EOffsetState::EOSAiming;
+		}
+		else {
+			OffsetState = EOffsetState::EOSHip;
+		}
 	}
 	TurnInPlace();
 }
@@ -60,7 +75,7 @@ void UShooterAnimInstance::TurnInPlace()
 	Pitch = ShooterChar->GetBaseAimRotation().Pitch;
 
 
-	if (Speed > 0) {
+	if (Speed > 0 || bIsInAir) {
 		//char moving, dont durn in place
 		RootYawOffset = 0;
 		CharYaw = ShooterChar->GetActorRotation().Yaw;

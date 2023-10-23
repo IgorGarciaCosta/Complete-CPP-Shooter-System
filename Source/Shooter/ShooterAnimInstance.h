@@ -6,6 +6,13 @@
 #include "Animation/AnimInstance.h"
 #include "ShooterAnimInstance.generated.h"
 
+UENUM(BlueprintType)
+enum class EOffsetState : uint8 {
+	EOSAiming UMETA(DIsplayName = "Aiming"),
+	EOSHip UMETA(DIsplayName = "Hip"),
+	EOSReloading UMETA(DIsplayName = "Reloading"),
+	EOSInAir UMETA(DIsplayName = "InAir"),
+};
 /**
  *
  */
@@ -68,4 +75,7 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		float RootYawOffset = 0.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		EOffsetState OffsetState = EOffsetState::EOSHip;
 };
