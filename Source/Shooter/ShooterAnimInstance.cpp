@@ -13,6 +13,8 @@ void UShooterAnimInstance::UpdateAnimationProperties(float DeltaTime)
 		ShooterChar = Cast<AShooterCharacter>(TryGetPawnOwner());
 	}
 	if (ShooterChar) {
+
+		bCrouching = ShooterChar->GetCrouching();
 		bReloading = ShooterChar->GetCombatState() == ECombatState::ECSReloading;
 
 		//get lateral speed

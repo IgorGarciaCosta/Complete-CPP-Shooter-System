@@ -101,6 +101,8 @@ protected:
 	UFUNCTION(BlueprintCallable)
 		void ReleaseClip();
 
+	void CrouchBtnPressed();
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -224,6 +226,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		UAnimMontage* ReloadMontage;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		bool bCrouching = false;
+
 
 
 public:
@@ -232,6 +237,8 @@ public:
 		FORCEINLINE UCameraComponent* GetFollowCamera() const { return FollowCamera; };
 
 		FORCEINLINE bool GetAIming() const { return bAiming; }
+
+		FORCEINLINE bool GetCrouching() const { return bCrouching; }
 
 		FORCEINLINE int8 GetOverlappedItemCount() const { return OverlappedItemCount; };
 

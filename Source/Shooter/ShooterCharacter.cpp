@@ -562,6 +562,14 @@ void AShooterCharacter::ReleaseClip()
 
 }
 
+void AShooterCharacter::CrouchBtnPressed()
+{
+
+	if (!GetCharacterMovement()->IsFalling()) {
+		bCrouching = !bCrouching;
+	}
+}
+
 
 
 // Called every frame
@@ -605,6 +613,8 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 	PlayerInputComponent->BindAction("AimingBtn", IE_Pressed, this, &AShooterCharacter::AimingBtnPressed);
 	PlayerInputComponent->BindAction("AimingBtn", IE_Released, this, &AShooterCharacter::AimingBtnReleased);
+
+	PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &AShooterCharacter::CrouchBtnPressed);
 
 }
 
