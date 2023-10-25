@@ -118,13 +118,15 @@ void UShooterAnimInstance::Lean(float DeltaTime)
 
 	if (ShooterChar == nullptr) return;
 
-	CharYawLastFrame = CharYaw;
+	CharRotationLastFrame = CharRotation;
 
-	CharYaw = ShooterChar->GetActorRotation().Yaw;
-	const float Target = (CharYaw - CharYawLastFrame)/DeltaTime;
+	CharRotation = ShooterChar->GetActorRotation();
+
+	FRotator Delta = UKismetMathLibrary::NormalizedDeltaRotator(CharRotation, CharRotationLastFrame);
+	const float Target = (Delta.Yaw)/DeltaTime;
 	const float Interp = FMath::FInterpTo(YawDelta, Target, DeltaTime, 6.f);
 
 	YawDelta = FMath::Clamp(Interp, -90.f, 90.f);
 
-	GEngine->AddOnScreenDebugMessage(2, -1, FColor::Cyan, FString::Printf(TEXT("YawDelta: %f"), YawDelta));
+	//GEngine->AddOnScreenDebugMessage(2, -1, FColor::Cyan, FString::Printf(TEXT("YawDelta: %f"), YawDelta));
 }

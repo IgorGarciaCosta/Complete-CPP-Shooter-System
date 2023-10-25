@@ -78,9 +78,9 @@ private:
 
 	float TIPCharYawLastFrame = 0.f;
 
-	float CharYaw = 0.f;
+	FRotator CharRotation;
 
-	float CharYawLastFrame = 0.f;
+	FRotator CharRotationLastFrame;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		float RootYawOffset = 0.f;
