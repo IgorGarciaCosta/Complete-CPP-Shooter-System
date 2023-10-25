@@ -61,6 +61,7 @@ void UShooterAnimInstance::UpdateAnimationProperties(float DeltaTime)
 		}
 	}
 	TurnInPlace();
+	Lean(DeltaTime);
 }
 
 void UShooterAnimInstance::NativeInitializeAnimation()
@@ -78,18 +79,18 @@ void UShooterAnimInstance::TurnInPlace()
 	if (Speed > 0 || bIsInAir) {
 		//char moving, dont durn in place
 		RootYawOffset = 0;
-		CharYaw = ShooterChar->GetActorRotation().Yaw;
+		TIPCharYaw = ShooterChar->GetActorRotation().Yaw;
 		RotationCurveLastFrame = 0;
 		RotationCurve = 0;
 	}
 
 	else {
-		CharYawLastFrame = CharYaw;
-		CharYaw = ShooterChar->GetActorRotation().Yaw;
+		TIPCharYawLastFrame = TIPCharYaw;
+		TIPCharYaw = ShooterChar->GetActorRotation().Yaw;
 
-		const float yawDelta = CharYaw - CharYawLastFrame;
+		const float TIPyawDelta = TIPCharYaw - TIPCharYawLastFrame;
 		//RootYawOffset updated and clamped to [-180, 180]
-		RootYawOffset = UKismetMathLibrary::NormalizeAxis(RootYawOffset - yawDelta);
+		RootYawOffset = UKismetMathLibrary::NormalizeAxis(RootYawOffset - TIPyawDelta);
 
 
 		//1 if turning, 0 if  not
@@ -110,4 +111,20 @@ void UShooterAnimInstance::TurnInPlace()
 			}
 		}
 	}
+}
+
+void UShooterAnimInstance::Lean(float DeltaTime)
+{
+
+	if (ShooterChar == nullptr) return;
+
+	CharYawLastFrame = CharYaw;
+
+	CharYaw = ShooterChar->GetActorRotation().Yaw;
+	const float Target = (CharYaw - CharYawLastFrame)/DeltaTime;
+	const float Interp = FMath::FInterpTo(YawDelta, Target, DeltaTime, 6.f);
+
+	YawDelta = FMath::Clamp(Interp, -90.f, 90.f);
+
+	GEngine->AddOnScreenDebugMessage(2, -1, FColor::Cyan, FString::Printf(TEXT("YawDelta: %f"), YawDelta));
 }

@@ -32,6 +32,9 @@ public:
 protected:
 	void TurnInPlace();
 
+	//calcs for leaning while running
+	void Lean(float DeltaTime);
+
 
 private:
 
@@ -69,6 +72,12 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		bool bAiming = false;
 
+
+	//turn in place (only updating when standing still)
+	float TIPCharYaw = 0.f;
+
+	float TIPCharYawLastFrame = 0.f;
+
 	float CharYaw = 0.f;
 
 	float CharYawLastFrame = 0.f;
@@ -78,4 +87,9 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		EOffsetState OffsetState = EOffsetState::EOSHip;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		float YawDelta;
+
+
 };
