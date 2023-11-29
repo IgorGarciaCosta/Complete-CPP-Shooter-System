@@ -199,6 +199,10 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		class AWeapon* EquippedWeapon;
 
+	float BasedMovementSpeed = 600.f;
+
+	float CrouchMovementSpeed = 200.f;
+
 
 	//set this in BP for the default weapon class
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
