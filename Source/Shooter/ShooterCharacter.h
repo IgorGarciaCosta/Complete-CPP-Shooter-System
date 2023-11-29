@@ -103,6 +103,9 @@ protected:
 
 	void CrouchBtnPressed();
 
+	void Aim();
+	void StopAiming();
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -232,6 +235,8 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		bool bCrouching = false;
+
+	bool bAimingBtnPressed = false;
 
 
 

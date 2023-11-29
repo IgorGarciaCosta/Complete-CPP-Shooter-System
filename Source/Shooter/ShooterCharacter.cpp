@@ -173,16 +173,16 @@ bool AShooterCharacter::GetBeamEndLoc(const FVector& MuzzleSocketLocation, FVect
 
 void AShooterCharacter::AimingBtnPressed()
 {
-	bAiming = true;
-	GetCharacterMovement()->MaxWalkSpeed = CrouchMovementSpeed;
+	bAimingBtnPressed = true;
+	if (CombatState != ECombatState::ECSReloading) {
+		Aim();
+	}
 }
 
 void AShooterCharacter::AimingBtnReleased()
 {
-	bAiming = false;
-	if (!bCrouching) {
-		GetCharacterMovement()->MaxWalkSpeed = BasedMovementSpeed;
-	}
+	bAimingBtnPressed = false;
+	StopAiming();
 }
 
 void AShooterCharacter::CameraInterpZoom(float DeltaTime)
@@ -515,10 +515,16 @@ void AShooterCharacter::ReloadWeapon()
 {
 	if (CombatState != ECombatState::ECSUnnocupied) return;
 
+	
+
 	if (EquippedWeapon == nullptr) return;
 
 	//do we have ammo of the correct type?
 	if (CarryingAmmo() && !EquippedWeapon->ClipIsFull()) {
+		if (bAiming) {
+			StopAiming();
+		}
+
 		SetCombatState(ECombatState::ECSReloading);
 
 		//play reload montage
@@ -571,6 +577,20 @@ void AShooterCharacter::CrouchBtnPressed()
 
 	if (!GetCharacterMovement()->IsFalling()) {
 		bCrouching = !bCrouching;
+	}
+}
+
+void AShooterCharacter::Aim()
+{
+	bAiming = true;
+	GetCharacterMovement()->MaxWalkSpeed = CrouchMovementSpeed;
+}
+
+void AShooterCharacter::StopAiming()
+{
+	bAiming = false;
+	if (!bCrouching) {
+		GetCharacterMovement()->MaxWalkSpeed = BasedMovementSpeed;
 	}
 }
 
@@ -661,6 +681,10 @@ void AShooterCharacter::FinishReloading()
 {
 
 	SetCombatState(ECombatState::ECSUnnocupied);
+
+	if (bAimingBtnPressed) {
+		Aim();
+	}
 
 	//udate ammo map
 	if (EquippedWeapon == nullptr) return;
