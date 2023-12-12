@@ -146,6 +146,8 @@ public:
 
 	FORCEINLINE EItemState GetItemState()const { return ItemState; };
 
+	FORCEINLINE int32 GetItemCount()const { return ItemCount; };
+
 	void SetItemState(EItemState state);
 
 	void StartItemCurve(AShooterCharacter* Char);

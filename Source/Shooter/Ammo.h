@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Item.h"
+#include "AmmoType.h"
 #include "Ammo.generated.h"
 
 /**
@@ -28,7 +29,11 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* AmmoMesh;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	EAmmoType AmmoType;
+
 public:
 	FORCEINLINE UStaticMeshComponent* GetAmmoMesh()const { return AmmoMesh; };
-	
+	FORCEINLINE EAmmoType GetAmmoType()const { return AmmoType; };
+
 };
