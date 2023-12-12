@@ -55,7 +55,10 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 
-	
+
+protected:
+	virtual void SetItemProperties(EItemState curState);
+
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		class UBoxComponent* CollisionBox;
@@ -81,7 +84,7 @@ private:
 
 	void SetStarsActive();
 
-	void SetItemPrpoerties(EItemState curState);
+	
 
 	void FinishInterping();
 

@@ -49,7 +49,7 @@ void AItem::BeginPlay()
 	AreaSphere->OnComponentBeginOverlap.AddDynamic(this, &AItem::OnShpereOverlapBegin);
 	AreaSphere->OnComponentEndOverlap.AddDynamic(this, &AItem::OnSphereOverlapEnd);
 
-	SetItemPrpoerties(ItemState);
+	SetItemProperties(ItemState);
 }
 
 void AItem::OnShpereOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -123,7 +123,7 @@ void AItem::SetStarsActive()
 	}
 }
 
-void AItem::SetItemPrpoerties(EItemState curState)
+void AItem::SetItemProperties(EItemState curState)
 {
 	switch (curState)
 	{
@@ -256,7 +256,7 @@ void AItem::ItemInterp(float DeltaTime)
 void AItem::SetItemState(EItemState state)
 {
 	ItemState = state; 
-	SetItemPrpoerties(state);
+	SetItemProperties(state);
 }
 
 void AItem::StartItemCurve(AShooterCharacter* Char)
