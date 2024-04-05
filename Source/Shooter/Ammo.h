@@ -32,6 +32,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	EAmmoType AmmoType;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		UTexture2D* AmmoIconTexture;
+
 public:
 	FORCEINLINE UStaticMeshComponent* GetAmmoMesh()const { return AmmoMesh; };
 	FORCEINLINE EAmmoType GetAmmoType()const { return AmmoType; };
