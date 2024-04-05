@@ -8,8 +8,8 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "ShooterCharacter.h"
 #include "Camera/CameraComponent.h"
-
-
+#include "Kismet/GameplaySTatics.h"
+#include "Sound/SoundCue.h"
 
 
 // Sets default values
@@ -262,6 +262,9 @@ void AItem::SetItemState(EItemState state)
 void AItem::StartItemCurve(AShooterCharacter* Char)
 {
 	CharRef = Char;
+	if (PickupSound) {
+		UGameplayStatics::PlaySound2D(this, PickupSound);
+	}
 
 	ItemInterpStartLoc = GetActorLocation();
 

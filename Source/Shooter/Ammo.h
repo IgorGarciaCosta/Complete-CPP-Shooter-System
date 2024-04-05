@@ -25,6 +25,13 @@ protected:
 
 	virtual void SetItemProperties(EItemState curState) override;
 
+	UFUNCTION()
+	void AmmoShpereOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void AmmoSphereOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* AmmoMesh;
@@ -34,6 +41,8 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		UTexture2D* AmmoIconTexture;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		class USphereComponent* AmmoCollisionSphere;
 
 public:
 	FORCEINLINE UStaticMeshComponent* GetAmmoMesh()const { return AmmoMesh; };
