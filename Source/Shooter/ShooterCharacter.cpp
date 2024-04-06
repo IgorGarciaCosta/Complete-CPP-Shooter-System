@@ -49,6 +49,24 @@ AShooterCharacter::AShooterCharacter()
 
 	HandSceneComponent = CreateDefaultSubobject<USceneComponent>("HandSceneComponent");
 
+
+	//constructing  scene comps
+	WeaponInterpComp = CreateDefaultSubobject<USceneComponent>("WeaponInterpComp");
+	WeaponInterpComp->SetupAttachment(GetFollowCamera());
+
+	InterpComp1 = CreateDefaultSubobject<USceneComponent>("InterpComp1");
+	InterpComp1->SetupAttachment(GetFollowCamera());
+	InterpComp2 = CreateDefaultSubobject<USceneComponent>("InterpComp2");
+	InterpComp2->SetupAttachment(GetFollowCamera());
+	InterpComp3 = CreateDefaultSubobject<USceneComponent>("InterpComp3");
+	InterpComp3->SetupAttachment(GetFollowCamera());
+	InterpComp4 = CreateDefaultSubobject<USceneComponent>("InterpComp4");
+	InterpComp4->SetupAttachment(GetFollowCamera());
+	InterpComp5 = CreateDefaultSubobject<USceneComponent>("InterpComp5");
+	InterpComp5->SetupAttachment(GetFollowCamera());
+	InterpComp6 = CreateDefaultSubobject<USceneComponent>("InterpComp6");
+	InterpComp6->SetupAttachment(GetFollowCamera());
+
 }
 
 // Called when the game starts or when spawned
