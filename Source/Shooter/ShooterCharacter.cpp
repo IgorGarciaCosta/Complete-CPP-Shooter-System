@@ -81,6 +81,9 @@ void AShooterCharacter::BeginPlay()
 
 	EquipWeapon(SpawnDefaultWeapon());
 	InitializeAmmoMap();
+
+	//create fintepLoc structs for each interp loc. Add to array
+	InitializeInterpLocations();
 }
 
 void AShooterCharacter::MoveForward(float value)
@@ -630,7 +633,50 @@ void AShooterCharacter::pickUpAmmo(AAmmo* Ammo)
 	Ammo->Destroy();
 }
 
+void AShooterCharacter::InitializeInterpLocations()
+{
+	//creating the struct
+	FInterpLocation WeaponLocation{ WeaponInterpComp, 0, };
+	InterpLocations.Add(WeaponLocation);
 
+	FInterpLocation InterpLoc1{ InterpComp1, 0 };
+	InterpLocations.Add(InterpLoc1);
+
+	FInterpLocation InterpLoc2{ InterpComp2, 0 };
+	InterpLocations.Add(InterpLoc2);
+	FInterpLocation InterpLoc3{ InterpComp3, 0 };
+	InterpLocations.Add(InterpLoc3);
+	FInterpLocation InterpLoc4{ InterpComp4, 0 };
+	InterpLocations.Add(InterpLoc4);
+	FInterpLocation InterpLoc5{ InterpComp5, 0 };
+	InterpLocations.Add(InterpLoc5);
+	FInterpLocation InterpLoc6{ InterpComp6, 0 };
+	InterpLocations.Add(InterpLoc6);
+}
+
+int32 AShooterCharacter::GetInterpLocationLowestItemCountIndex()
+{
+	int32 LowestIndex = 1;
+	int32 LowestCount = INT_MAX;//macro that holds the maximum value of an int32
+
+	for (int32 i = 1; i < InterpLocations.Num();i++) {
+		if (InterpLocations[i].ItemCount < LowestCount) {
+			LowestIndex = i;
+			LowestCount = InterpLocations[i].ItemCount;
+		}
+	}
+
+	return LowestIndex;
+}
+
+void AShooterCharacter::IncrementInterpLocItemCount(int32 Index, int32 Amount)
+{
+	if (Amount < -1 || Amount>1) return;
+
+	if (InterpLocations.Num() >= Index) {
+		InterpLocations[Index].ItemCount += Amount;
+	}
+}
 
 // Called every frame
 void AShooterCharacter::Tick(float DeltaTime)
@@ -678,6 +724,14 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 }
 
+FInterpLocation AShooterCharacter::GetInterpLocation(int32 index)
+{
+	if (index < InterpLocations.Num()) {
+		return InterpLocations[index];
+	}
+	return FInterpLocation();//return an empty FInterpLocation
+}
+
 void AShooterCharacter::IncrementOverlappedItemCount(int8 Amount)
 {
 	if (OverlappedItemCount + Amount <= 0) {
@@ -695,12 +749,12 @@ float AShooterCharacter::GetCrosshairSpreadMult() const
 	return CrosshairSpreadMult;
 }
 
-FVector AShooterCharacter::GetCameraInterpLoc()
-{
-	const FVector CameraWoldLoc = FollowCamera->GetComponentLocation();
-	const FVector CameraForward = FollowCamera->GetForwardVector();
-	return CameraWoldLoc + CameraForward * CameraInterpDistance + FVector(0.f, 0.f, CameraInterpElevation);
-}
+//FVector AShooterCharacter::GetCameraInterpLoc()
+//{
+//	const FVector CameraWoldLoc = FollowCamera->GetComponentLocation();
+//	const FVector CameraForward = FollowCamera->GetForwardVector();
+//	return CameraWoldLoc + CameraForward * CameraInterpDistance + FVector(0.f, 0.f, CameraInterpElevation);
+//}
 
 void AShooterCharacter::GetPuckupItem(AItem* item)
 {

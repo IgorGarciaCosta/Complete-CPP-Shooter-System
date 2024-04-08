@@ -196,6 +196,7 @@ void AItem::FinishInterping()
 {
 	bInterping = false;
 	if (CharRef) {
+		CharRef->IncrementInterpLocItemCount(InterpLocIndex, -1);//subtract 1 from the itemCount of the interp loc sctruct
 		CharRef->GetPuckupItem(this);
 	}
 	//set scale back to normal
@@ -221,7 +222,7 @@ void AItem::ItemInterp(float DeltaTime)
 		FVector ItemLoc = ItemInterpStartLoc;
 
 		//get loc in front of the camera
-		const FVector CameraInterpLocation = CharRef->GetCameraInterpLoc();
+		const FVector CameraInterpLocation = GetInterpLocation();
 
 		//vector from item to camera
 		const FVector ItemToCamera = FVector(0.f, 0.f, (CameraInterpLocation - ItemLoc).Z);
@@ -253,6 +254,24 @@ void AItem::ItemInterp(float DeltaTime)
 	}
 }
 
+FVector AItem::GetInterpLocation()
+{
+	if (CharRef == nullptr) return FVector(0.f);
+
+	switch (ItemTtype) {
+		case EItemType::EIT_Ammo:
+			return CharRef->GetInterpLocation(InterpLocIndex).SceneComponent->GetComponentLocation();
+		break;
+
+		case EItemType::EIT_Weapon:
+			return CharRef->GetInterpLocation(0).SceneComponent->GetComponentLocation();
+		break;
+		default:
+			break;
+	}
+	return FVector();
+}
+
 void AItem::SetItemState(EItemState state)
 {
 	ItemState = state; 
@@ -260,8 +279,12 @@ void AItem::SetItemState(EItemState state)
 }
 
 void AItem::StartItemCurve(AShooterCharacter* Char)
-{
+{ 
 	CharRef = Char;
+
+	InterpLocIndex = CharRef->GetInterpLocationLowestItemCountIndex();
+	CharRef->IncrementInterpLocItemCount(InterpLocIndex, 1);//add 1 to the itemCount for this interpLocation struct
+
 	if (PickupSound) {
 		UGameplayStatics::PlaySound2D(this, PickupSound);
 	}

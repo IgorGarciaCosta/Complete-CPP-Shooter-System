@@ -17,6 +17,19 @@ enum class ECombatState :uint8 {
 	ECS_MAX UMETA(DisplayName = "DefaultMAX")
 };
 
+USTRUCT (BlueprintType)
+struct FInterpLocation {
+	GENERATED_BODY()
+
+	//scene comp to use for its loc for i terping
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		USceneComponent* SceneComponent;
+
+	//num of items interping to/at this scene comp  oc
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 ItemCount;
+};
+
 UCLASS()
 class SHOOTER_API AShooterCharacter : public ACharacter
 {
@@ -107,6 +120,8 @@ protected:
 	void StopAiming();
 
 	void pickUpAmmo(class AAmmo * Ammo);
+
+	void InitializeInterpLocations();
 
 public:	
 	// Called every frame
@@ -256,6 +271,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	USceneComponent* InterpComp6;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		TArray<FInterpLocation>InterpLocations;
+
 public:
 		FORCEINLINE USpringArmComponent* GetCameraBoom()const { return CameraBoom; }
 
@@ -271,13 +289,14 @@ public:
 
 		FORCEINLINE ECombatState GetCombatState() const { return CombatState; }
 
+		FInterpLocation GetInterpLocation(int32 index);
 
 		void IncrementOverlappedItemCount(int8 Amount);
 
 		UFUNCTION(BlueprintCallable)
 			float GetCrosshairSpreadMult() const;
 
-		FVector GetCameraInterpLoc();
+		//FVector GetCameraInterpLoc();
 
 		void GetPuckupItem(AItem* item);
 
@@ -290,5 +309,9 @@ public:
 
 		UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 			USceneComponent* HandSceneComponent;
+
+		int32 GetInterpLocationLowestItemCountIndex();
+
+		void IncrementInterpLocItemCount(int32 Index, int32 Amount);
 };
 

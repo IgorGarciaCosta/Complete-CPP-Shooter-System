@@ -25,9 +25,14 @@ enum class EItemState :uint8 {
 	EIS_Pickedup UMETA(DisplayName = "Pickedup"),
 	EIS_Equipped UMETA(DisplayName = "Equipped"),
 	EIS_Falling UMETA(DisplayName = "Falling"),
-	
-
 	EIS_MAX UMETA(DisplayName = "DefaultMAX")
+};
+
+UENUM(BlueprintType)
+enum class EItemType :uint8 {
+	EIT_Ammo UMETA(DisplayName = "Ammo"),
+	EIT_Weapon UMETA(DisplayName = "Weapon"),
+	EIT_MAX UMETA(DisplayName = "DefaultMAX")
 };
 
 
@@ -84,11 +89,11 @@ private:
 
 	void SetStarsActive();
 
-	
-
 	void FinishInterping();
 
 	void ItemInterp(float DeltaTime);
+
+	FVector GetInterpLocation();
 
 	//item zloc when interping
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
@@ -130,6 +135,11 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		class USoundCue* EquipSound;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		EItemType ItemTtype = EItemType::EIT_MAX;
+	//index of the interp loc this item is interping to
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		int32 InterpLocIndex = 0;
 
 public:
 	FORCEINLINE UWidgetComponent* GetPickupWidget() const { return PickupWidget; };
