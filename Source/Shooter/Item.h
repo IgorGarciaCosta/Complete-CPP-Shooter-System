@@ -58,8 +58,7 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-
+	void PlayEquipSound();//called in shooter character getpickupitem()
 
 protected:
 	virtual void SetItemProperties(EItemState curState);
@@ -94,6 +93,9 @@ private:
 	void ItemInterp(float DeltaTime);
 
 	FVector GetInterpLocation();
+
+	void PlayPickupSound();
+	
 
 	//item zloc when interping
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))

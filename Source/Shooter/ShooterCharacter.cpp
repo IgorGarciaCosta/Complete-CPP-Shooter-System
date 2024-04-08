@@ -678,6 +678,19 @@ void AShooterCharacter::IncrementInterpLocItemCount(int32 Index, int32 Amount)
 	}
 }
 
+void AShooterCharacter::StartPickupSoundTimer()
+{
+	bShouldPlayPickupSound = false;
+	GetWorldTimerManager().SetTimer(PickupSoundTimer,this, &AShooterCharacter::ResetPickupSoundTimer, PickupSoundResetTime);
+}
+
+void AShooterCharacter::StartEquiupSoundTimer()
+{
+	bShouldPlayEquipSound = false;
+	GetWorldTimerManager().SetTimer(EquipSoundTimer, this, &AShooterCharacter::ResetEquipSoundTimer, EquipSoundResetTime);
+
+}
+
 // Called every frame
 void AShooterCharacter::Tick(float DeltaTime)
 {
@@ -724,6 +737,16 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 }
 
+void AShooterCharacter::ResetPickupSoundTimer()
+{
+	bShouldPlayPickupSound = true;
+}
+
+void AShooterCharacter::ResetEquipSoundTimer()
+{
+	bShouldPlayEquipSound = true;
+}
+
 FInterpLocation AShooterCharacter::GetInterpLocation(int32 index)
 {
 	if (index < InterpLocations.Num()) {
@@ -758,9 +781,8 @@ float AShooterCharacter::GetCrosshairSpreadMult() const
 
 void AShooterCharacter::GetPuckupItem(AItem* item)
 {
-	if (item->GetEquipSound()) {
-		UGameplayStatics::PlaySound2D(this, item->GetEquipSound());
-	}
+	item->PlayEquipSound();
+
 	auto weapon = Cast<AWeapon>(item);
 	if (weapon) {
 		SwapWeapon(weapon);
