@@ -313,6 +313,14 @@ void AItem::InitializeCustomDepth()
 	DisableCustomDepth();
 }
 
+void AItem::OnConstruction(const FTransform& Transform)
+{
+	if (MaterialInstance) {
+		DynamicMaterialInstance = UMaterialInstanceDynamic::Create(MaterialInstance, this);
+		ItemMesh->SetMaterial(MaterialIndex, DynamicMaterialInstance);
+	}
+}
+
 void AItem::SetItemState(EItemState state)
 {
 	ItemState = state; 
