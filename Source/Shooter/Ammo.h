@@ -31,7 +31,6 @@ protected:
 	UFUNCTION()
 	void AmmoSphereOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
-
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* AmmoMesh;
@@ -47,5 +46,8 @@ private:
 public:
 	FORCEINLINE UStaticMeshComponent* GetAmmoMesh()const { return AmmoMesh; };
 	FORCEINLINE EAmmoType GetAmmoType()const { return AmmoType; };
+
+	virtual void EnableCustomDepth() override;
+	virtual void DisableCustomDepth() override;
 
 };

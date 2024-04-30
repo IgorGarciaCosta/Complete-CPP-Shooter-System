@@ -398,10 +398,12 @@ void AShooterCharacter::TraceForItems()
 				if (TraceHitItem->GetPickupWidget()) {
 					//show item's pickup widget
 					TraceHitItem->GetPickupWidget()->SetVisibility(true);
+					TraceHitItem->EnableCustomDepth();
 				}
 			}
 			else if (LeastHitItem) {
 				LeastHitItem->GetPickupWidget()->SetVisibility(false);
+				LeastHitItem->DisableCustomDepth();
 			}
 
 

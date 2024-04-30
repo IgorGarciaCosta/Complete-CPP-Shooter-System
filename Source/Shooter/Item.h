@@ -143,6 +143,9 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 		int32 InterpLocIndex = 0;
 
+	
+	virtual void InitializeCustomDepth();
+
 public:
 	FORCEINLINE UWidgetComponent* GetPickupWidget() const { return PickupWidget; };
 
@@ -163,5 +166,8 @@ public:
 	void SetItemState(EItemState state);
 
 	void StartItemCurve(AShooterCharacter* Char);
+
+	virtual void EnableCustomDepth();
+	virtual void DisableCustomDepth();
 
 };
